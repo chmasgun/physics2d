@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
 
-const fieldSize : [number,number] = [900, 800]
-const ballRadius : number = 8
-const speedFactor : number = 2
+const fieldSize : [number,number] = [1200, 800]
+const ballRadius : number = 15
+const speedFactor : number = 0.1
+const noOfBalls : number = 120
+
+
+const customBalls = []
+
 type CanvasProps = {};
 
 
@@ -12,7 +17,7 @@ const MainCanvas: React.FC<CanvasProps> = () => {
     const ballGenerator = BallGenerator.getInstance();
 
     // Create Ball instances with direction vectors
-    const initialBalls = Array.from(Array(50).keys()).map(x =>
+    const initialBalls = Array.from(Array(noOfBalls).keys()).map(x =>
         ballGenerator.createBall({
             x: (fieldSize[0] / 2) + (Math.random() - 0.5) * (fieldSize[0] - ballRadius * 2)- ballRadius   ,
             y: (fieldSize[1] / 2) + (Math.random() - 0.5) * (fieldSize[1] - ballRadius * 2)- ballRadius , 
