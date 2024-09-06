@@ -3,9 +3,9 @@ import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
 
 const fieldSize : [number,number] = [1200, 800]
-const ballRadius : number = 15
-const speedFactor : number = 0.1
-const noOfBalls : number = 120
+const ballRadius : number = 20
+const speedFactor : number = 2
+const noOfBalls : number = 20
 
 
 const customBalls = []
@@ -30,14 +30,16 @@ const MainCanvas: React.FC<CanvasProps> = () => {
 
     useEffect(() => {
         let animationFrameId: number;
-
+    
         const updateBalls = () => {
+            
             setBalls(prevBalls => {
+                var startTime = performance.now();
                 const newBalls = prevBalls.map(ball => {
                     ball.updatePosition();
                     return ball;
                 });
-
+    
                 // Check for collisions
                 for (let i = 0; i < newBalls.length; i++) {
                     for (let j = i + 1; j < newBalls.length; j++) {
@@ -46,15 +48,17 @@ const MainCanvas: React.FC<CanvasProps> = () => {
                         }
                     }
                 }
-
+                var endTime = performance.now();
+                // console.log(`  ${endTime - startTime} milliseconds`);
                 return newBalls;
             });
-
+    
+    
             animationFrameId = requestAnimationFrame(updateBalls);
         };
-
+    
         animationFrameId = requestAnimationFrame(updateBalls);
-
+    
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
     }, []);
 
