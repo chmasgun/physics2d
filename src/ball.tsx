@@ -4,9 +4,9 @@ export class Ball {
     private bounds: [number, number];
     private color: string;
     private radius: number;
-    private gravity: number = 0.03; // 0.003
+    private gravity: number = 0.01; // 0.003
     private friction: number = 0.01;
-    private airFriction: number = 0.01;
+    private airFriction: number =  0.003; // 0.01
 
     constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10) {
         this.direction = direction;
@@ -14,7 +14,10 @@ export class Ball {
         this.color = getRandomColor();
         this.radius = radius;
     }
+    public getRadius(): number {
 
+        return this.radius
+    }
     public getDirection(): [number, number] {
 
         return this.direction
@@ -35,14 +38,19 @@ export class Ball {
         this.updateDirection( [this.direction[0] * (1- friction) , this.direction[1] * (1- friction) ])
     }
 
+    public push ([x, y]: [number, number]): void {
+        this.x  += x ;
+        this.x  += y ; 
+    }
+    
 
     // Method to update the position of the ball
     public updatePosition(): void {
-        if (this.x + this.direction[0] < 0 || this.x + this.direction[0] > this.bounds[0] - this.radius * 2) {
+        if (this.x + this.direction[0] < this.radius || this.x + this.direction[0] > this.bounds[0] - this.radius  ) {
             this.updateDirection([(- this.direction[0]), (this.direction[1]  + this.gravity)])
 
         }
-        if (this.y + this.direction[1] < 0 || this.y + this.direction[1] > this.bounds[1] - this.radius * 2) {
+        if (this.y + this.direction[1] < this.radius || this.y + this.direction[1] > this.bounds[1] - this.radius  ) {
             this.updateDirection([(this.direction[0]), (-this.direction[1]  + this.gravity)])
 
 
@@ -56,9 +64,9 @@ export class Ball {
         // if( Math.abs(this.direction[1]) < 2* this.gravity){
         //     this.direction[1] = 0
         // }
-        this.x = Math.max(0, Math.min(this.x + this.direction[0], this.bounds[0] - this.radius * 2));
-        this.y = Math.max(0, Math.min(this.y + this.direction[1], this.bounds[1] - this.radius * 2));
-        console.log(this.direction);
+        this.x = Math.max(this.radius, Math.min(this.x + this.direction[0], this.bounds[0] - this.radius  ));
+        this.y = Math.max(this.radius, Math.min(this.y + this.direction[1], this.bounds[1] - this.radius  ));
+         
 
     }
 
@@ -72,8 +80,8 @@ export class Ball {
 
     // Method to handle collision with another ball
     public handleCollisionWith(other: Ball): void {
-        const dx = other.getPosition()[0] - this.getPosition()[0];
-        const dy = other.getPosition()[1] - this.getPosition()[1];
+        const dx = other.x - this.x;
+        const dy = other.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         // Normal vector
@@ -100,6 +108,7 @@ export class Ball {
         this.updateDirection([(tx * dpTan1 + nx * m2) * (1 - this.friction), (ty * dpTan1 + ny * m2) * (1 - this.friction)]);
         other.updateDirection([(tx * dpTan2 + nx * m1) * (1 - this.friction), (ty * dpTan2 + ny * m1) * (1 - this.friction)]);
         this.setPosition([other.getPosition()[0] - 2 * nx * this.radius, other.getPosition()[1] - 2 * ny * this.radius])
+        
         //  [
         //     Math.max(0, Math.min(other.getPosition()[0] - 2 * nx * this.radius, this.bounds[0] - this.radius * 2)),
         //     Math.max(0, Math.min(other.getPosition()[1] - 2 * ny * this.radius, this.bounds[0] - this.radius * 2))]
@@ -117,8 +126,8 @@ export class Ball {
                     // border: "1px solid black",
                     borderRadius: "100px",
                     position: "absolute",
-                    left: `${this.x}px`,
-                    top: `${this.y}px`,
+                    left: `${this.x - this.radius}px`,
+                    top: `${this.y - this.radius}px`,
                     backgroundColor: this.color
                 }}
             ></div>
