@@ -4,9 +4,9 @@ export class Ball {
     private bounds: [number, number];
     private color: string;
     private radius: number;
-    private gravity: number = 0.014; // 0.003
-    private friction: number = 0.01;
-    private airFriction: number = 0.01; // 0.01
+    private gravity: number = 0.025; // 0.003
+    //private friction: number = 0.01;
+    private airFriction: number = 0.015; // 0.01
     private touchingWall: boolean = false;
     private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
@@ -55,7 +55,10 @@ export class Ball {
 
         return this.touchingAnotherBall
     }
-
+    
+    public isInTheScene(): number{
+        return this.y > 0 ? 1:0;
+    }
 
     // Method to update the position of the ball
     public updatePosition(): void {

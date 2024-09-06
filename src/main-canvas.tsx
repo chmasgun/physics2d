@@ -3,12 +3,22 @@ import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
 import { CircularObstacle, LinearObstacle, Obstacle, RectangularObstacle } from './Obstacle';
 
-const fieldSize: [number, number] = [700, 1800]
-const ballRadius: number = 5 
+const fieldSize: [number, number] = [1000, 1200]
+const ballRadius: number = 2
 const speedFactor: number = 0
-const noOfBalls: number = 300
+const noOfBalls: number = 1000
 
-const spawnArea = [[20,680], [-5800,200]]
+
+const bottleneckWidth : number= 120;
+const bottleneckY = 250;
+
+const binFullWidth = 520
+const binStartOffsetWithCircles = 150
+const binStartEndX = [ (fieldSize[0]-binFullWidth)/2,  (fieldSize[0] + binFullWidth)/2]
+const binStartEndY = [800,  fieldSize[1]]
+
+
+const spawnArea = [[200,800], [- noOfBalls * ballRadius* ballRadius ,0]]
 
 const customBalls = []
 
@@ -17,6 +27,7 @@ type CanvasProps = {};
 
 const MainCanvas: React.FC<CanvasProps> = () => {
     const ballGenerator = BallGenerator.getInstance();
+    const [ballsRemaining, setBallsRemaining] = useState<number>(noOfBalls)
 
     // Create Ball instances with direction vectors
     const initialBalls = Array.from(Array(noOfBalls).keys()).map(x =>
@@ -31,27 +42,27 @@ const MainCanvas: React.FC<CanvasProps> = () => {
     const [balls, setBalls] = useState<Ball[]>(initialBalls);
     const obstacles: Obstacle[] = [
 
-        new LinearObstacle(0, 500, 320, 850 ,0.01),
-        new LinearObstacle(700, 500, 380, 850, 0.01),
-        new LinearObstacle(320, 850, 125, 1250, 0.02 ),
-        new LinearObstacle(380, 850, 575, 1250, 0.02),
+        new LinearObstacle( 200, 0,  (fieldSize[0] -bottleneckWidth)/2 , bottleneckY ,0.01),
+        new LinearObstacle(fieldSize[0] - 200, 0,(fieldSize[0] + bottleneckWidth)/2, bottleneckY, 0.01),
+        new LinearObstacle((fieldSize[0] - bottleneckWidth)/2, bottleneckY, binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, 0.02 ),
+        new LinearObstacle((fieldSize[0] + bottleneckWidth)/2, bottleneckY, binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, 0.02),
 
-        new LinearObstacle(125, 600+650, 125, 600+1200 ,0.1),
-        new LinearObstacle(575, 600+650, 575, 600+1200 ,0.1),
+        new LinearObstacle(binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[0], binStartEndY[1] ,0.1),
+        new LinearObstacle(binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[1], binStartEndY[1] ,0.1),
 
-        ...CircularLayer(350, 600+250, 3, 50, 1),
-        ...CircularLayer(350, 600+300, 3, 50, 2),
-        ...CircularLayer(350, 600+350, 3, 50, 3), 
-        ...CircularLayer(350, 600+400, 3, 50, 4), 
-        ...CircularLayer(350, 600+450, 3, 50, 5), 
-        ...CircularLayer(350, 600+500, 3, 50, 6), 
-        ...CircularLayer(350, 600+550, 3, 50, 7), 
-        ...CircularLayer(350, 600+600, 3, 50, 8), 
-        ...CircularLayer(350, 600+650, 3, 50, 9), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 0 * 50, 3, 50, 1),
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 1 * 50, 3, 50, 2),
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 2 * 50, 3, 50, 3), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 3 * 50, 3, 50, 4), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 4 * 50, 3, 50, 5), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 5 * 50, 3, 50, 6), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 6 * 50, 3, 50, 7), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 7 * 50, 3, 50, 8), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 8 * 50, 3, 50, 9), 
    
-        ...EndingBlocks(125, 575, 1300, 1800, ballRadius+12 ) ,
+        ...EndingBlocks(binStartEndX[0], binStartEndX[1], binStartEndY[0], binStartEndY[1], ballRadius * 3 - 1 ) ,
 
-        new LinearObstacle(125, 600+1199, 575, 600+1199 , 1),
+        new LinearObstacle(binStartEndX[0], binStartEndY[1] -1 , binStartEndX[1], binStartEndY[1] -1  , 1),
         
     ];
     useEffect(() => {
@@ -59,13 +70,18 @@ const MainCanvas: React.FC<CanvasProps> = () => {
 
         const updateBalls = () => {
 
+            let tempBallsLeft = 0;
             setBalls(prevBalls => {
                 var startTime = performance.now();
+                let localBallsLeft = 0;
                 const newBalls = prevBalls.map(ball => {
                     ball.updatePosition();
                     ball.setTouchingWall(false)
+                    localBallsLeft += (1 - ball.isInTheScene());
                     return ball;
                 });
+                tempBallsLeft = localBallsLeft;
+                setBallsRemaining(tempBallsLeft)
                 for (let ball of newBalls) {
                     for (let obstacle of obstacles) {
                         if (obstacle.checkCollision(ball)) {
@@ -86,6 +102,7 @@ const MainCanvas: React.FC<CanvasProps> = () => {
                 }
                 var endTime = performance.now();
                 // console.log(`  ${endTime - startTime} milliseconds`);
+                
                 return newBalls;
             });
 
@@ -99,9 +116,8 @@ const MainCanvas: React.FC<CanvasProps> = () => {
     }, []);
 
     return (
-        <div style={{  display: "flex", justifyContent: "center", alignItems: "center", background: "#ddd", minHeight: "100svh" }}>
-
-            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "white" }}>
+        <div style={{  display: "flex" , alignItems: "center", background: "#ddd", minHeight: "100svh" }}>
+            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "white" , margin:"auto"}}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
                         {ball.render()}
@@ -116,6 +132,11 @@ const MainCanvas: React.FC<CanvasProps> = () => {
                         </React.Fragment>
                     ))}
                 </svg>
+            </div>
+
+            <div style={{position:"fixed", left:"0", top:"0"}}>
+                <p>Remaining balls</p>
+                <span>{ballsRemaining}</span>
             </div>
         </div>
     );
@@ -144,7 +165,7 @@ function EndingBlocks( xstart: number, xend:number, ystart:number, yend:number, 
         bins = Math.floor((xend-xstart) / binWidth)
     }
     // generates the ending bins automatically, drawing Obstacle objects
-    return Array.from(Array(bins).keys()).map((x,i) =>
+    return Array.from(Array(bins-1).keys()).map((x,i) =>
         new LinearObstacle( xstart + (xend-xstart) * (i+1) / (bins), ystart, xstart + (xend-xstart) * (i+1) / (bins ) , yend, 0.12)
     )
 }

@@ -97,7 +97,7 @@ export class LinearObstacle implements Obstacle {
                 y1={this.y1}
                 x2={this.x2}
                 y2={this.y2}
-                stroke="black"
+                stroke="#888"
                 strokeWidth="1"
             />
 
@@ -206,9 +206,9 @@ export class CircularObstacle implements Obstacle {
                 cx={this.x}
                 cy={this.y}
                 r={this.radius}
-                stroke="black"
+                stroke="#888"
                 strokeWidth="1"
-                fill="none"
+                fill="#888"
             />
         );
     }
