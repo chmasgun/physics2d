@@ -4,9 +4,9 @@ export class Ball {
     private bounds: [number, number];
     private color: string;
     private radius: number;
-    private gravity: number = 0.01; // 0.003
+    private gravity: number = 0.015; // 0.003
     private friction: number = 0.01;
-    private airFriction: number =  0.003; // 0.01
+    private airFriction: number =  0.01; // 0.01
 
     constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10) {
         this.direction = direction;

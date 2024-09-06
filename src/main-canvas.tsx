@@ -3,12 +3,12 @@ import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
 import { CircularObstacle, LinearObstacle, Obstacle, RectangularObstacle } from './Obstacle';
 
-const fieldSize: [number, number] = [700, 1200]
-const ballRadius: number = 5
-const speedFactor: number = 0.4
-const noOfBalls: number = 4
+const fieldSize: [number, number] = [700, 1800]
+const ballRadius: number = 3
+const speedFactor: number = 0
+const noOfBalls: number = 300
 
-const spawnArea = [[100,600], [50,150]]
+const spawnArea = [[100,600], [20,430]]
 
 const customBalls = []
 
@@ -31,33 +31,33 @@ const MainCanvas: React.FC<CanvasProps> = () => {
     const [balls, setBalls] = useState<Ball[]>(initialBalls);
     const obstacles: Obstacle[] = [
 
-        new LinearObstacle(0, 200, 320, 240),
-        new LinearObstacle(700, 200, 380, 240),
-        new LinearObstacle(320, 250, 125, 650),
-        new LinearObstacle(380, 250, 575, 650),
+        new LinearObstacle(0, 700, 320, 840),
+        new LinearObstacle(700, 700, 380, 840),
+        new LinearObstacle(320, 850, 125, 1250),
+        new LinearObstacle(380, 850, 575, 1250),
 
-        new LinearObstacle(125, 650, 125, 1200),
-        new LinearObstacle(575, 650, 575, 1200),
+        new LinearObstacle(125, 600+650, 125, 600+1200),
+        new LinearObstacle(575, 600+650, 575, 600+1200),
 
-        ...CircularLayer(350, 250, 5, 50, 1),
-        ...CircularLayer(350, 300, 5, 50, 2),
-        ...CircularLayer(350, 350, 5, 50, 3), 
-        ...CircularLayer(350, 400, 5, 50, 4), 
-        ...CircularLayer(350, 450, 5, 50, 5), 
-        ...CircularLayer(350, 500, 5, 50, 6), 
-        ...CircularLayer(350, 550, 5, 50, 7), 
-        ...CircularLayer(350, 600, 5, 50, 8), 
-        ...CircularLayer(350, 650, 5, 50, 9), 
+        ...CircularLayer(350, 600+250, 5, 50, 1),
+        ...CircularLayer(350, 600+300, 5, 50, 2),
+        ...CircularLayer(350, 600+350, 5, 50, 3), 
+        ...CircularLayer(350, 600+400, 5, 50, 4), 
+        ...CircularLayer(350, 600+450, 5, 50, 5), 
+        ...CircularLayer(350, 600+500, 5, 50, 6), 
+        ...CircularLayer(350, 600+550, 5, 50, 7), 
+        ...CircularLayer(350, 600+600, 5, 50, 8), 
+        ...CircularLayer(350, 600+650, 5, 50, 9), 
         
 
-        new LinearObstacle(175, 700, 175, 1200),
-        new LinearObstacle(225, 700, 225, 1200),
-        new LinearObstacle(275, 700, 275, 1200),
-        new LinearObstacle(325, 700, 325, 1200),
-        new LinearObstacle(375, 700, 375, 1200),
-        new LinearObstacle(425, 700, 425, 1200),
-        new LinearObstacle(475, 700, 475, 1200),
-        new LinearObstacle(525, 700, 525, 1200),
+        new LinearObstacle(175, 600+700, 175, 600+1200),
+        new LinearObstacle(225, 600+700, 225, 600+1200),
+        new LinearObstacle(275, 600+700, 275, 600+1200),
+        new LinearObstacle(325, 600+700, 325, 600+1200),
+        new LinearObstacle(375, 600+700, 375, 600+1200),
+        new LinearObstacle(425, 600+700, 425, 600+1200),
+        new LinearObstacle(475, 600+700, 475, 600+1200),
+        new LinearObstacle(525, 600+700, 525, 600+1200),
         
     ];
     useEffect(() => {

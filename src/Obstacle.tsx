@@ -167,10 +167,10 @@ export class CircularObstacle implements Obstacle {
         const reflectionUnitVector = [reflectionX / Math.sqrt(reflectionX * reflectionX + reflectionY * reflectionY), reflectionY / Math.sqrt(reflectionX * reflectionX + reflectionY * reflectionY)]
 
         console.log([ball.getDirection(), [reflectionX, reflectionY], reflectionUnitVector]);
-        ball.updateDirection([reflectionX * 0.9, reflectionY * 0.9])
-        // ball.setPosition([
-        //     this.x + reflectionUnitVector[0] * (this.radius  ),
-        //     this.y + reflectionUnitVector[1] * (this.radius  )])
+        ball.updateDirection([reflectionX * 1, reflectionY * 1])
+        ball.setPosition([
+            this.x + (dx/distance) * (this.radius + ball.getRadius()  ),
+            this.y + (dy/distance) * (this.radius + ball.getRadius() )])
     }
 
     render(): JSX.Element {
