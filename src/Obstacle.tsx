@@ -2,7 +2,9 @@ import { Ball } from "./ball";
 export interface Obstacle {
     checkCollision(ball: Ball): boolean;
     handleCollision(ball: Ball): void;
+    friction: number;
     render(): JSX.Element;
+
 }
 
 
@@ -11,13 +13,16 @@ export class LinearObstacle implements Obstacle {
     private y1: number;
     private x2: number;
     private y2: number;
-
-
-    constructor(x1: number, y1: number, x2: number, y2: number) {
+    friction: number;
+    
+    
+    
+    constructor(x1: number, y1: number, x2: number, y2: number, friction: number) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.friction = friction;
 
     }
 
@@ -31,31 +36,31 @@ export class LinearObstacle implements Obstacle {
         const lineDY = this.y2 - this.y1;
 
         // Vector from point 1 to the ball
-        const ballDX = ballX   - this.x1;
-        const ballDY = ballY   - this.y1;
+        const ballDX = ballX - this.x1;
+        const ballDY = ballY - this.y1;
 
         // Project ball vector onto line vector to find the closest point on the line
         const lineLengthSquared = lineDX * lineDX + lineDY * lineDY;
         const t = Math.max(0, Math.min(1, (ballDX * lineDX + ballDY * lineDY) / lineLengthSquared));
-
+        if (t > 1 || t < 0) { return false }
         // Closest point on the line segment
         const closestX = this.x1 + t * lineDX;
         const closestY = this.y1 + t * lineDY;
 
         // Distance from the ball to the closest point
-        const distX = ballX   - closestX;
-        const distY = ballY   - closestY;
+        const distX = ballX - closestX;
+        const distY = ballY - closestY;
         const distanceSquared = distX * distX + distY * distY;
 
         return distanceSquared < radius * radius;
     }
 
     handleCollision(ball: Ball): void {
-        const lineVectorX = this.x2 - this.x1;
-        const lineVectorY = this.y2 - this.y1;
-        const lineLength = Math.sqrt(lineVectorX * lineVectorX + lineVectorY * lineVectorY);
-        const normalX = -lineVectorY / lineLength;
-        const normalY = lineVectorX / lineLength;
+        const lineDX = this.x2 - this.x1;
+        const lineDY = this.y2 - this.y1;
+        const lineLength = Math.sqrt(lineDX * lineDX + lineDY * lineDY);
+        const normalX = -lineDY / lineLength;
+        const normalY = lineDX / lineLength;
 
         // Calculate the dot product of the ball's velocity and the normal vector
         const dotProduct = ball.getDirection()[0] * normalX + ball.getDirection()[1] * normalY;
@@ -64,7 +69,25 @@ export class LinearObstacle implements Obstacle {
         const reflectionX = ball.getDirection()[0] - 2 * dotProduct * normalX;
         const reflectionY = ball.getDirection()[1] - 2 * dotProduct * normalY;
 
-        ball.updateDirection([reflectionX * 1, reflectionY * 1])
+        ball.updateDirection([reflectionX * (1-this.friction), reflectionY  * (1-this.friction)])
+        if(this.friction >= 1.0) {ball.setIsFrozen(true) }
+
+        // Calculate the closest point on the line to the ball
+        // Calculate the closest point on the line to the ball
+        const t = ((ball.x - this.x1) * lineDX + (ball.y - this.y1) * lineDY) / (lineLength * lineLength);
+        const closestX = this.x1 + t * lineDX;
+        const closestY = this.y1 + t * lineDY;
+ 
+        // Calculate the vector from the closest point to the ball's center
+        const distX = ball.x - closestX;
+        const distY = ball.y - closestY;
+        const distance = Math.sqrt(distX * distX + distY * distY);
+
+        // Adjust the ball's position by its radius along the direction vector
+        const newX = closestX + ball.getRadius() * (distX / distance);
+        const newY = closestY + ball.getRadius() * (distY / distance);
+
+        ball.setPosition([newX, newY]);
     }
 
     render(): JSX.Element {
@@ -87,12 +110,14 @@ export class RectangularObstacle implements Obstacle {
     private y: number;
     private width: number;
     private height: number;
+    friction: number;
 
-    constructor(x: number, y: number, width: number, height: number) {
+    constructor(x: number, y: number, width: number, height: number, friction:number) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.friction = friction;
     }
 
     checkCollision(ball: Ball): boolean {
@@ -134,23 +159,25 @@ export class CircularObstacle implements Obstacle {
     private x: number;
     private y: number;
     private radius: number;
+    friction: number;
 
-    constructor(x: number, y: number, radius: number) {
+    constructor(x: number, y: number, radius: number, friction:number) {
         this.x = x;
         this.y = y;
         this.radius = radius;
+        this.friction = friction;
     }
 
     checkCollision(ball: Ball): boolean {
-        const dx = ball.x   - this.x;
-        const dy = ball.y   - this.y;
+        const dx = ball.x - this.x;
+        const dy = ball.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         return distance < (this.radius + ball.getRadius());
     }
 
     handleCollision(ball: Ball): void {
         const dx = ball.x - this.x;
-        const dy = ball.y   - this.y;
+        const dy = ball.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         // Normal vector
@@ -166,11 +193,11 @@ export class CircularObstacle implements Obstacle {
 
         const reflectionUnitVector = [reflectionX / Math.sqrt(reflectionX * reflectionX + reflectionY * reflectionY), reflectionY / Math.sqrt(reflectionX * reflectionX + reflectionY * reflectionY)]
 
-        console.log([ball.getDirection(), [reflectionX, reflectionY], reflectionUnitVector]);
+        // console.log([ball.getDirection(), [reflectionX, reflectionY], reflectionUnitVector]);
         ball.updateDirection([reflectionX * 1, reflectionY * 1])
         ball.setPosition([
-            this.x + (dx/distance) * (this.radius + ball.getRadius()  ),
-            this.y + (dy/distance) * (this.radius + ball.getRadius() )])
+            this.x + (dx / distance) * (this.radius + ball.getRadius()),
+            this.y + (dy / distance) * (this.radius + ball.getRadius())])
     }
 
     render(): JSX.Element {
