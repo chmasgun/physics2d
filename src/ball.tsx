@@ -60,6 +60,12 @@ export class Ball {
         return this.y > 0 ? 1:0;
     }
 
+    public destroy():void{
+        this.radius=0;
+        this.y= 100000
+        
+    }
+
     // Method to update the position of the ball
     public updatePosition(): void {
         if (this.x + this.direction[0] < this.radius || this.x + this.direction[0] > this.bounds[0] - this.radius) {
@@ -131,20 +137,20 @@ export class Ball {
 
 
         // Update velocities
-        if (other.isFrozen) {
-            this.updateDirection([0, 0])
-            this.setIsFrozen(true)
-        } else {
-            this.updateDirection([(tx * dpTan1 + nx * m2), (ty * dpTan1 + ny * m2)]);
-        }
-        if (this.isFrozen) {
-            other.updateDirection([0, 0])
-            other.setIsFrozen(true)
-        } else {
-            other.updateDirection([(tx * dpTan2 + nx * m1), (ty * dpTan2 + ny * m1)]);
-        }
-
-
+        // if (other.isFrozen) {
+        //     this.updateDirection([0, 0])
+        //     this.setIsFrozen(true)
+        // } else {
+        //     this.updateDirection([(tx * dpTan1 + nx * m2), (ty * dpTan1 + ny * m2)]);
+        // }
+        // if (this.isFrozen) {
+        //     other.updateDirection([0, 0])
+        //     other.setIsFrozen(true)
+        // } else {
+        //     other.updateDirection([(tx * dpTan2 + nx * m1), (ty * dpTan2 + ny * m1)]);
+        // }
+        this.updateDirection([(tx * dpTan1 + nx * m2), (ty * dpTan1 + ny * m2)]);
+        other.updateDirection([(tx * dpTan2 + nx * m1), (ty * dpTan2 + ny * m1)]);
 
         if (!this.touchingWall) {
             if (!this.getTouchingAnotherBall()) {

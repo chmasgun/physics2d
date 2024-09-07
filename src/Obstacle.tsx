@@ -7,24 +7,35 @@ export interface Obstacle {
 
 }
 
+interface Collector{
+    collect(ball:Ball):void;
+}
 
-export class LinearObstacle implements Obstacle {
+
+export class LinearObstacle implements Obstacle, Collector {
     private x1: number;
     private y1: number;
     private x2: number;
     private y2: number;
     private color:string;
+    private droppedBallHandleFunction : (ball:Ball)=>void ;
     friction: number;
     
     
     
-    constructor(x1: number, y1: number, x2: number, y2: number, friction: number, color:string="#999") {
+    constructor(x1: number, y1: number, x2: number, y2: number, friction: number, color:string="#999", droppedBallHandleFunction:(ball:Ball)=>void = ()=>{} ) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
         this.friction = friction;
         this.color = color;
+        this.droppedBallHandleFunction = droppedBallHandleFunction
+    }
+
+    collect(ball: Ball): void {
+        this.droppedBallHandleFunction(ball);
+        ball.destroy();
     }
 
     checkCollision(ball: Ball): boolean {
@@ -71,7 +82,7 @@ export class LinearObstacle implements Obstacle {
         const reflectionY = ball.getDirection()[1] - 2 * dotProduct * normalY;
 
         ball.updateDirection([reflectionX * (1-this.friction), reflectionY  * (1-this.friction)])
-        if(this.friction >= 1.0) {ball.setIsFrozen(true) }
+        if(this.friction >= 1.0) { this.collect(ball);}
 
         // Calculate the closest point on the line to the ball
         // Calculate the closest point on the line to the ball
