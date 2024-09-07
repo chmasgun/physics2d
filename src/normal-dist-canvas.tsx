@@ -188,7 +188,7 @@ function getObstacles(ballRadius: number) {
 
         ...EndingBlocks(binStartEndX[0], binStartEndX[1], binStartEndY[0], binStartEndY[1], ballRadius * 3 - 1),
 
-        new LinearObstacle(binStartEndX[0], binStartEndY[1] - 1, binStartEndX[1], binStartEndY[1] - 1, 1),
+        new LinearObstacle(binStartEndX[0], binStartEndY[1] - 20, binStartEndX[1], binStartEndY[1] - 20, 1 , "#fff1"),
 
     ];
 }

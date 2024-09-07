@@ -13,17 +13,18 @@ export class LinearObstacle implements Obstacle {
     private y1: number;
     private x2: number;
     private y2: number;
+    private color:string;
     friction: number;
     
     
     
-    constructor(x1: number, y1: number, x2: number, y2: number, friction: number) {
+    constructor(x1: number, y1: number, x2: number, y2: number, friction: number, color:string="#999") {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
         this.friction = friction;
-
+        this.color = color;
     }
 
     checkCollision(ball: Ball): boolean {
@@ -97,7 +98,7 @@ export class LinearObstacle implements Obstacle {
                 y1={this.y1}
                 x2={this.x2}
                 y2={this.y2}
-                stroke="#888"
+                stroke={this.color}
                 strokeWidth="1"
             />
 
