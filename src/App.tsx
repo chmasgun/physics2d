@@ -1,13 +1,14 @@
 import React from 'react';
-import MainCanvas from './main-canvas';
+ 
 
 import './App.css';
+import NormalDistributionSimulationApp from './normal-dist-simulation';
 
 function App() {
   return (
     <div className="App">
 
-        <MainCanvas></MainCanvas>
+        <NormalDistributionSimulationApp></NormalDistributionSimulationApp>
     </div>
   );
 }

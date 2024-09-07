@@ -4,9 +4,9 @@ import { Ball } from './ball';
 import { CircularObstacle, LinearObstacle, Obstacle, RectangularObstacle } from './Obstacle';
 
 const fieldSize: [number, number] = [1000, 1200]
-const ballRadius: number = 2
+//const ballRadius: number = 3
 const speedFactor: number = 0
-const noOfBalls: number = 1000
+const noOfBalls: number = 500
 
 
 const bottleneckWidth : number= 120;
@@ -17,62 +17,52 @@ const binStartOffsetWithCircles = 150
 const binStartEndX = [ (fieldSize[0]-binFullWidth)/2,  (fieldSize[0] + binFullWidth)/2]
 const binStartEndY = [800,  fieldSize[1]]
 
-
-const spawnArea = [[200,800], [- noOfBalls * ballRadius* ballRadius ,0]]
-
+ 
 const customBalls = []
 
-type CanvasProps = {};
+type CanvasProps = { ballCount:number,ballRadius:number,};
 
 
-const MainCanvas: React.FC<CanvasProps> = () => {
+
+ 
+
+
+
+const NormalDistributionCanvas: React.FC<CanvasProps> = ( {ballCount, ballRadius}) => {
     const ballGenerator = BallGenerator.getInstance();
     const [ballsRemaining, setBallsRemaining] = useState<number>(noOfBalls)
-
-    // Create Ball instances with direction vectors
-    const initialBalls = Array.from(Array(noOfBalls).keys()).map(x =>
-        ballGenerator.createBall({
-            x:  spawnArea[0][0] +   Math.random() * (spawnArea[0][1] - spawnArea[0][0]),
-            y:  spawnArea[1][0] +   Math.random() * (spawnArea[1][1] - spawnArea[1][0]),
-            direction: [(Math.random() - 0.5) * speedFactor, (Math.random() - 0.5) * speedFactor],
-            bounds: fieldSize,
-            radius: ballRadius
-        })
-    );
-    const [balls, setBalls] = useState<Ball[]>(initialBalls);
-    const obstacles: Obstacle[] = [
-
-        new LinearObstacle( 200, 0,  (fieldSize[0] -bottleneckWidth)/2 , bottleneckY ,0.01),
-        new LinearObstacle(fieldSize[0] - 200, 0,(fieldSize[0] + bottleneckWidth)/2, bottleneckY, 0.01),
-        new LinearObstacle((fieldSize[0] - bottleneckWidth)/2, bottleneckY, binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, 0.02 ),
-        new LinearObstacle((fieldSize[0] + bottleneckWidth)/2, bottleneckY, binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, 0.02),
-
-        new LinearObstacle(binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[0], binStartEndY[1] ,0.1),
-        new LinearObstacle(binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[1], binStartEndY[1] ,0.1),
-
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 0 * 50, 3, 50, 1),
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 1 * 50, 3, 50, 2),
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 2 * 50, 3, 50, 3), 
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 3 * 50, 3, 50, 4), 
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 4 * 50, 3, 50, 5), 
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 5 * 50, 3, 50, 6), 
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 6 * 50, 3, 50, 7), 
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 7 * 50, 3, 50, 8), 
-        ...CircularLayer(fieldSize[0]/2, bottleneckY + 8 * 50, 3, 50, 9), 
-   
-        ...EndingBlocks(binStartEndX[0], binStartEndX[1], binStartEndY[0], binStartEndY[1], ballRadius * 3 - 1 ) ,
-
-        new LinearObstacle(binStartEndX[0], binStartEndY[1] -1 , binStartEndX[1], binStartEndY[1] -1  , 1),
+    
+    
+    const [balls, setBalls] = useState<Ball[]>([]);
+     
+    const [spawnArea, setSpawnArea] = useState([[0,0], [0,0]])
+    useEffect(() => {
+        const newSpawnArea = [[200,800], [- ballCount * ballRadius* ballRadius ,0]]
+        // Initialize balls based on ballCount
+        const initialBalls = Array.from(Array(ballCount).keys()).map(x =>
+            ballGenerator.createBall({
+                x:  newSpawnArea[0][0] +   Math.random() * (newSpawnArea[0][1] - newSpawnArea[0][0]),
+                y:  newSpawnArea[1][0] +   Math.random() * (newSpawnArea[1][1] - newSpawnArea[1][0]),
+                direction: [(Math.random() - 0.5) * speedFactor, (Math.random() - 0.5) * speedFactor],
+                bounds: fieldSize,
+                radius: ballRadius
+            })
+        );
         
-    ];
+        setSpawnArea(spawnArea)
+        setBalls(initialBalls)
+         
+    }, [ballCount]);
+    
+    const obstacles: Obstacle[] =  getObstacles(ballRadius)
     useEffect(() => {
         let animationFrameId: number;
-
+        
         const updateBalls = () => {
 
             let tempBallsLeft = 0;
             setBalls(prevBalls => {
-                var startTime = performance.now();
+                //var startTime = performance.now();
                 let localBallsLeft = 0;
                 const newBalls = prevBalls.map(ball => {
                     ball.updatePosition();
@@ -100,21 +90,21 @@ const MainCanvas: React.FC<CanvasProps> = () => {
                         }
                     }
                 }
-                var endTime = performance.now();
+                //var endTime = performance.now();
                 // console.log(`  ${endTime - startTime} milliseconds`);
                 
                 return newBalls;
             });
 
-
+            
             animationFrameId = requestAnimationFrame(updateBalls);
         };
 
         animationFrameId = requestAnimationFrame(updateBalls);
-
+        
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
     }, []);
-
+    
     return (
         <div style={{  display: "flex" , alignItems: "center", background: "#ddd", minHeight: "100svh" }}>
             <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "white" , margin:"auto"}}>
@@ -142,22 +132,22 @@ const MainCanvas: React.FC<CanvasProps> = () => {
     );
 };
 
-export default MainCanvas;
+export default NormalDistributionCanvas;
 
 
 
 function CircularLayer ( center: number, y:number, radius:number, distance:number, count: number): ( Obstacle[]) {
- 
+    
     // generates layers of circle blocks
     return Array.from(Array(count).keys()).map((x,i) =>
         new CircularObstacle( center + distance*(0.5 + i- count*0.5) , y, radius, 0.04)
-    )
+)
 }
 
 
 
 function EndingBlocks( xstart: number, xend:number, ystart:number, yend:number,  binWidth:number, binCount:number=1 ){
-
+    
     let bins:number;
     if(binWidth === undefined){
         bins= binCount
@@ -167,5 +157,36 @@ function EndingBlocks( xstart: number, xend:number, ystart:number, yend:number, 
     // generates the ending bins automatically, drawing Obstacle objects
     return Array.from(Array(bins-1).keys()).map((x,i) =>
         new LinearObstacle( xstart + (xend-xstart) * (i+1) / (bins), ystart, xstart + (xend-xstart) * (i+1) / (bins ) , yend, 0.12)
-    )
+)
+
 }
+
+
+function getObstacles(ballRadius : number) {
+
+    return [
+
+        new LinearObstacle( 200, 0,  (fieldSize[0] -bottleneckWidth)/2 , bottleneckY ,0.01),
+        new LinearObstacle(fieldSize[0] - 200, 0,(fieldSize[0] + bottleneckWidth)/2, bottleneckY, 0.01),
+        new LinearObstacle((fieldSize[0] - bottleneckWidth)/2, bottleneckY, binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, 0.02 ),
+        new LinearObstacle((fieldSize[0] + bottleneckWidth)/2, bottleneckY, binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, 0.02),
+    
+        new LinearObstacle(binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[0], binStartEndY[1] ,0.1),
+        new LinearObstacle(binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[1], binStartEndY[1] ,0.1),
+    
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 0 * 50, 3, 50, 1),
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 1 * 50, 3, 50, 2),
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 2 * 50, 3, 50, 3), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 3 * 50, 3, 50, 4), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 4 * 50, 3, 50, 5), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 5 * 50, 3, 50, 6), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 6 * 50, 3, 50, 7), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 7 * 50, 3, 50, 8), 
+        ...CircularLayer(fieldSize[0]/2, bottleneckY + 8 * 50, 3, 50, 9), 
+    
+        ...EndingBlocks(binStartEndX[0], binStartEndX[1], binStartEndY[0], binStartEndY[1], ballRadius * 3 - 1 ) ,
+    
+        new LinearObstacle(binStartEndX[0], binStartEndY[1] -1 , binStartEndX[1], binStartEndY[1] -1  , 1),
+        
+    ];
+}   
