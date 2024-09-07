@@ -5,7 +5,7 @@ interface NormalDistributionSetupPopupProps {
 }
 
 const NormalDistributionSetupPopup: React.FC<NormalDistributionSetupPopupProps> = ({ onSubmit }) => {
-    const [fieldSize, setFieldSize] = useState<[number, number]>([800, 600]);
+
     const [ballCount, setBallCount] = useState<number>(200);
     const [ballRadius, setBallRadius] = useState<number>(5);
 
@@ -15,16 +15,18 @@ const NormalDistributionSetupPopup: React.FC<NormalDistributionSetupPopupProps> 
     };
 
     return (
-        <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px', border: '1px solid black' }}>
+        <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '10px', border: '1px solid black',width:"min(80vw, 400px)" }}>
             <h2>Setup Simulation</h2>
             <label>
                 Ball Radius:
-                <input type="number" value={ballRadius} onChange={(e) => setBallRadius(+e.target.value)} />
+                <input type="range" value={ballRadius} min={3} max={10} onChange={(e) => setBallRadius(+e.target.value)} />
+                <span>{ballRadius}</span>
             </label>
             <br />
             <label>
                 Ball Count:
-                <input type="number" value={ballCount} onChange={(e) => setBallCount(+e.target.value)} />
+                <input type="range" value={ballCount} min={50} max={1000 / ballRadius} onChange={(e) => setBallCount(+e.target.value)} />
+                <span>{ballCount}</span>
             </label>
             <br />
             <button onClick={handleSubmit}>Start Simulation</button>

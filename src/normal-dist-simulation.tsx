@@ -16,10 +16,14 @@ const NormalDistributionSimulationApp: React.FC = () => {
     const handleSetupSubmit = (params: SimulationParams) => {
         setSimulationParams(params);
     };
+    const resetParamsCallback = () =>{
+        setSimulationParams(null)
+    }
+
     return (
         <div>
             {!simulationParams && <NormalDistributionSetupPopup  onSubmit={handleSetupSubmit} />}
-            {simulationParams && <NormalDistributionCanvas  ballCount={simulationParams.ballCount} ballRadius={simulationParams.ballRadius} />}
+            {simulationParams && <NormalDistributionCanvas  ballCount={simulationParams.ballCount} ballRadius={simulationParams.ballRadius} resetParamsCallback={resetParamsCallback} />}
         </div>
     );
 };
