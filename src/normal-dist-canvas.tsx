@@ -20,7 +20,7 @@ const binStartEndY = [800, fieldSize[1]]
 
 const customBalls = []
 
-type CanvasProps = { ballCount: number, ballRadius: number,resetParamsCallback:() => void };
+type CanvasProps = { ballCount: number, ballRadius: number,ballColor:string,resetParamsCallback:() => void };
 
 
 
@@ -28,7 +28,7 @@ type CanvasProps = { ballCount: number, ballRadius: number,resetParamsCallback:(
 
 
 
-const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, resetParamsCallback }) => {
+const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback }) => {
     const ballGenerator = BallGenerator.getInstance();
     
     const binWidth = ballRadius * 3 - 1
@@ -38,12 +38,12 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     const [ballsInBins, setBallsInBins] = useState<number[]>(Array.from(Array(bins).keys()).map(x=> {return 0}))
     const [ballsRemaining, setBallsRemaining] = useState<number>(noOfBalls)
     const [balls, setBalls] = useState<Ball[]>([]);
-
     const [spawnArea, setSpawnArea] = useState< [[number, number], [number, number]]>([[0, 0], [0, 0]])
+
     useEffect(() => {
         const newSpawnArea: [[number, number], [number, number]] = [[200, 800], [- ballCount * ballRadius * ballRadius, 0]]
         // Initialize balls based on ballCount
-        const initialBalls = InitializeBalls(ballCount, ballRadius, ballGenerator, newSpawnArea)
+        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea)
 
         setBallsInBins(Array.from(Array(bins).keys()).map(x=>  {return 0}))
         setSpawnArea(newSpawnArea)
@@ -56,6 +56,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     //const ballsInBinsTotal = ballsInBins.reduce((partialsum, a) => partialsum+a, 0)
     const ballsInBinsMax = Math.max(...ballsInBins)
     const ballsInBinsPerc = ballsInBins.map(x => x/ballsInBinsMax)
+    
     useEffect(() => {
         let animationFrameId: number;
 
@@ -108,8 +109,9 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     function handleRestart() {
         console.log(ballCount, ballRadius, ballGenerator, spawnArea);
-        const initialBalls = InitializeBalls(ballCount, ballRadius, ballGenerator, spawnArea)
-
+        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, spawnArea)
+       
+        setBallsInBins(Array.from(Array(bins).keys()).map(x=>  {return 0}))
         setBalls(initialBalls)
     }
 
@@ -131,7 +133,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
                     ))}
                 </svg>
                 {/* histogram visualization */}
-                <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#f001", transform:"translateY(-100%)", margin: "auto", display:"flex", alignItems:"flex-end" }}>
+                <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#5551", transform:"translateY(calc(-100% - 4px))", margin: "auto", display:"flex", alignItems:"flex-end" }}>
                     {ballsInBinsPerc.map( x => 
                         <div style={{height:`${100*x}%`, background:"#4e48", flex:1}}> </div>
                         )}
@@ -208,7 +210,7 @@ function getObstacles(ballRadius: number , binWidth: number, setBallsInBins:any,
 }
 
 
-function InitializeBalls(ballCount: number, ballRadius: number, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]]) {
+function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]]) {
 
     return Array.from(Array(ballCount).keys()).map(x =>
         ballGenerator.createBall({
@@ -216,7 +218,8 @@ function InitializeBalls(ballCount: number, ballRadius: number, ballGenerator: B
             y: spawnArea[1][0] + Math.random() * (spawnArea[1][1] - spawnArea[1][0]),
             direction: [(Math.random() - 0.5) * speedFactor, (Math.random() - 0.5) * speedFactor],
             bounds: fieldSize,
-            radius: ballRadius
+            radius: ballRadius,
+            color : ballColor
         })
     );
 }

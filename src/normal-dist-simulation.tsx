@@ -4,9 +4,10 @@ import NormalDistributionSetupPopup from './normal-dist-params-setup';
 import NormalDistributionCanvas from './normal-dist-canvas';
 
 interface SimulationParams {
-     
+
     ballCount: number;
     ballRadius: number;
+    ballColor: string;
 }
 
 
@@ -16,14 +17,18 @@ const NormalDistributionSimulationApp: React.FC = () => {
     const handleSetupSubmit = (params: SimulationParams) => {
         setSimulationParams(params);
     };
-    const resetParamsCallback = () =>{
+    const resetParamsCallback = () => {
         setSimulationParams(null)
     }
 
     return (
         <div>
-            {!simulationParams && <NormalDistributionSetupPopup  onSubmit={handleSetupSubmit} />}
-            {simulationParams && <NormalDistributionCanvas  ballCount={simulationParams.ballCount} ballRadius={simulationParams.ballRadius} resetParamsCallback={resetParamsCallback} />}
+            {!simulationParams && <NormalDistributionSetupPopup onSubmit={handleSetupSubmit} />}
+            {simulationParams && <NormalDistributionCanvas
+                ballCount={simulationParams.ballCount}
+                ballRadius={simulationParams.ballRadius}
+                ballColor={simulationParams.ballColor}
+                resetParamsCallback={resetParamsCallback} />}
         </div>
     );
 };

@@ -6,15 +6,15 @@ export class Ball {
     private radius: number;
     private gravity: number = 0.025; // 0.003
     //private friction: number = 0.01;
-    private airFriction: number = 0.015; // 0.01
+    private airFriction: number = 0.012; // 0.01
     private touchingWall: boolean = false;
     private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10) {
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string ) {
         this.direction = direction;
         this.bounds = bounds;
-        this.color = getRandomColor();
+        this.color = color==="random" ? getRandomColor() : color;
         this.radius = radius;
 
     }
