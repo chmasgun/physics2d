@@ -13,7 +13,7 @@ export class Ball {
     private touchingAnotherBall: boolean = false;
     private mass:number;
     
-    private attractionGravitationalConstant:number = 50
+    private attractionGravitationalConstant:number = 420
 
     constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, airFriction:number,gravity:number, mass:number=0 ) {
         this.direction = direction;
@@ -116,12 +116,10 @@ export class Ball {
 
         // if(!this.touchingAnotherBall){
 
-        this.x = Math.max(this.radius, Math.min(this.x + this.direction[0], this.bounds[0] - this.radius));
-        this.y =  Math.min(this.y + this.direction[1], this.bounds[1] - this.radius) ;
-        // }
-        // else{
-        //     this.touchingAnotherBall= false
-        // }
+        //this.x = Math.max(this.radius, Math.min(this.x + this.direction[0], this.bounds[0] - this.radius));
+        //this.y =  Math.min(this.y + this.direction[1], this.bounds[1] - this.radius) ;
+        this.x = this.x + this.direction[0];
+        this.y = this.y + this.direction[1];
     }
 
     // Method to check collision with another ball
