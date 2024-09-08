@@ -220,7 +220,7 @@ function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string,
             bounds: fieldSize,
             radius: ballRadius,
             color : ballColor,
-            gravity: gravity
+            gravity: gravity, mass:0
         })
     );
 }

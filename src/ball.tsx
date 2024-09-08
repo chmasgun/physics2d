@@ -10,13 +10,15 @@ export class Ball {
     private touchingWall: boolean = false;
     private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
+    private mass:number;
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number ) {
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number, mass:number=0 ) {
         this.direction = direction;
         this.bounds = bounds;
         this.color = color==="random" ? getRandomColor() : color;
         this.radius = radius;
         this.gravity= gravity;
+        this.mass = mass;
 
     }
     public getRadius(): number {
