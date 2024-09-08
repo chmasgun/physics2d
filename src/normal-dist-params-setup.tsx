@@ -8,7 +8,7 @@ const NormalDistributionSetupPopup: React.FC<NormalDistributionSetupPopupProps> 
 
     const [ballCount, setBallCount] = useState<number>(200);
     const [ballRadius, setBallRadius] = useState<number>(5);
-    const [ballColor, setBallColor] = useState<string>("#aaaaaa");
+    const [ballColor, setBallColor] = useState<string>("#aaaafa");
     const [colorCheckboxChecked, setColorCheckboxChecked] = useState<boolean>(false);
 
     const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
