@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 export class Ball {
+    
     private direction: [number, number];
     private bounds: [number, number];
     private color: string;
@@ -8,16 +9,19 @@ export class Ball {
     //private friction: number = 0.01;
     private airFriction: number = 0.012; // 0.01
     private touchingWall: boolean = false;
-    private isFrozen: boolean = false;
+    // private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
     private mass:number;
+    
+    private attractionGravitationalConstant:number = 50
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number, mass:number=0 ) {
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, airFriction:number,gravity:number, mass:number=0 ) {
         this.direction = direction;
         this.bounds = bounds;
         this.color = color==="random" ? getRandomColor() : color;
         this.radius = radius;
         this.gravity= gravity;
+        this.airFriction= airFriction;
         this.mass = mass;
 
     }
@@ -48,9 +52,9 @@ export class Ball {
     public setTouchingWall(isTouching: boolean): void {
         this.touchingWall = isTouching
     }
-    public setIsFrozen(isFrozen: boolean): void {
-        this.isFrozen = isFrozen
-    }
+    // public setIsFrozen(isFrozen: boolean): void {
+    //     this.isFrozen = isFrozen
+    // }
     public setTouchingAnotherBall(touchingAnotherBall: boolean): void {
         this.touchingAnotherBall = touchingAnotherBall
     }
@@ -68,22 +72,40 @@ export class Ball {
         this.y= 100000
         
     }
+    
+    public applyAttractionForce(ball: Ball) {
+         
+        
+        const lineDX = this.x - ball.x; 
+        const lineDY = this.y - ball.y;
+        const lineLengthSq =    Math.max(lineDX * lineDX + lineDY * lineDY , (ball.radius + this.radius)*(ball.radius + this.radius));
+        const lineLength =    Math.sqrt(lineLengthSq);
+
+        const thisForce = this.attractionGravitationalConstant * ball.mass / lineLengthSq
+        const otherForce = this.attractionGravitationalConstant * this.mass / lineLengthSq
+
+        //console.log(thisForce, otherForce);
+        this.updateDirection([ this.direction[0] - thisForce * (lineDX/lineLength) , this.direction[1] - thisForce * (lineDY/lineLength)])
+        ball.updateDirection([ ball.direction[0] + otherForce * (lineDX/lineLength) , ball.direction[1] + otherForce * (lineDY/lineLength)])
+
+    }
 
     // Method to update the position of the ball
     public updatePosition(): void {
         if (this.x + this.direction[0] < this.radius || this.x + this.direction[0] > this.bounds[0] - this.radius) {
-            this.updateDirection([(- this.direction[0]), (this.direction[1] + this.gravity)])
+            //this.updateDirection([(- this.direction[0]), (this.direction[1] + this.gravity)])
 
         }
         if ( this.y + this.direction[1] > this.bounds[1] - this.radius) {
-            this.updateDirection([(this.direction[0]), (-this.direction[1] + this.gravity)])
+            //this.updateDirection([(this.direction[0]), (-this.direction[1] + this.gravity)])
 
 
         } else {
 
             this.updateDirection([
                 this.direction[0],
-                (this.direction[1] + (this.isFrozen ? 0 : this.gravity))])
+                (this.direction[1] + ( //this.isFrozen ? 0 : 
+                    this.gravity))])
             this.applyFriction(this.airFriction)
 
         }
@@ -192,7 +214,8 @@ export class Ball {
                     position: "absolute",
                     left: `${this.x - this.radius}px`,
                     top: `${this.y - this.radius}px`,
-                    backgroundColor: this.color
+                    backgroundColor: this.color,
+                    boxShadow:`0px 0px 35px 10px  ${this.color}`
                 }}
             ></div>
         );

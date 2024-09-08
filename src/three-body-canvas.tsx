@@ -3,7 +3,7 @@ import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
 import { CircularObstacle, LinearObstacle, Obstacle, RectangularObstacle } from './Obstacle';
 
-const fieldSize: [number, number] = [1000, 900]
+const fieldSize: [number, number] = [10000, 9000]
 
 const customBalls = []
 
@@ -27,33 +27,36 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
                  ballGenerator.createBall({
                     x: 300,
                     y: 350,
-                    direction: [0,0 ],
+                    direction: [0.2 , 0],
                     bounds: fieldSize,
-                    radius: 20,
+                    radius: 10,
                     color : "red",
                     gravity: 0,
-                    mass: 10
+                    airFriction:0, 
+                    mass: 1
                 }),
                 ballGenerator.createBall({
                     x: 700,
                     y: 350,
-                    direction: [0,0 ],
+                    direction: [-0.1 , 0.1 * Math.sqrt(3) ],
                     bounds: fieldSize,
-                    radius: 20,
-                    color : "green",
+                    radius: 10,
+                    color : "yellow",
                     gravity: 0,
-                    mass: 10
+                    airFriction:0, 
+                    mass: 1
                 })
                 ,
                 ballGenerator.createBall({
                     x: 500,
-                    y: 650,
-                    direction: [0,0 ],
+                    y: 350 + 200 * Math.sqrt(3),
+                    direction: [-0.1 , -0.1 * Math.sqrt(3)],
                     bounds: fieldSize,
-                    radius: 20,
-                    color : "blue",
+                    radius: 10,
+                    color : "cyan",
                     gravity: 0,
-                    mass: 10
+                    airFriction:0, 
+                    mass:  1
                 })
             ]
         ) 
@@ -90,9 +93,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
                 // Check for collisions
                 for (let i = 0; i < newBalls.length; i++) {
                     for (let j = i + 1; j < newBalls.length; j++) {
-                        if (newBalls[i].isCollidingWith(newBalls[j])) {
-                            newBalls[i].handleCollisionWith(newBalls[j]);
-                        }
+                        newBalls[i].applyAttractionForce(newBalls[j])
                     }
                 }
             
@@ -114,8 +115,8 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
 
 
     return (
-        <div style={{ display: "flex", alignItems: "center", background: "#ddd", minHeight: "100svh" }}>
-              <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "white", margin: "auto" }}>
+        <div style={{ display: "flex", alignItems: "center", background: "#ddd", minHeight: "100svh", minWidth:"100svw" , overflowX: "clip"}}>
+              <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "#111", margin: "auto" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
                         {ball.render()}

@@ -8,6 +8,7 @@ const fieldSize: [number, number] = [1000, 900]
 const speedFactor: number = 0
 const noOfBalls: number = 500
 const gravity: number= 0.025
+const airFriction: number = 0.012
 
 const bottleneckWidth: number = 120;
 const bottleneckY = 250;
@@ -220,7 +221,9 @@ function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string,
             bounds: fieldSize,
             radius: ballRadius,
             color : ballColor,
-            gravity: gravity, mass:0
+            gravity: gravity, 
+            airFriction: airFriction,
+            mass:0
         })
     );
 }
