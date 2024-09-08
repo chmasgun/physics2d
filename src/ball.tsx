@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 export class Ball {
-    
-    
-    
+
+
+
     private direction: [number, number];
     private bounds: [number, number];
     private color: string;
@@ -13,21 +13,22 @@ export class Ball {
     private touchingWall: boolean = false;
     // private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
-    private mass:number;
-    private scale:number = 1
-    private attractionGravitationalConstant:number = 420
+    private mass: number;
+    private scale: number = 1
+    private attractionGravitationalConstant: number = 420
     private renderPosition: [number, number] = [this.x, this.y]
     private shouldGlow: boolean = false;
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number,airFriction:number, mass:number=0, shouldGlow:boolean=false ) {
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color: string, gravity: number, airFriction: number, mass: number = 0, shouldGlow: boolean = false, attractionGravitationalConstant: number = 0) {
         this.direction = direction;
         this.bounds = bounds;
-        this.color = color==="random" ? getRandomColor() : color;
+        this.color = color === "random" ? getRandomColor() : color;
         this.radius = radius;
-        this.gravity= gravity;
-        this.airFriction= airFriction;
+        this.gravity = gravity;
+        this.airFriction = airFriction;
         this.mass = mass;
         this.shouldGlow = shouldGlow
+        this.attractionGravitationalConstant = attractionGravitationalConstant
 
     }
     public getRadius(): number {
@@ -67,31 +68,31 @@ export class Ball {
 
         return this.touchingAnotherBall
     }
-    
-    public isInTheScene(): number{
-        return this.y > 0 ? 1:0;
+
+    public isInTheScene(): number {
+        return this.y > 0 ? 1 : 0;
     }
 
-    public destroy():void{
-        this.radius=0;
-        this.y= 100000
-        
+    public destroy(): void {
+        this.radius = 0;
+        this.y = 100000
+
     }
-    
+
     public applyAttractionForce(ball: Ball) {
-         
-        
-        const lineDX =  (this.x - ball.x); 
-        const lineDY =  (this.y - ball.y);
-        const lineLengthSq =    Math.max(lineDX * lineDX + lineDY * lineDY , (ball.radius + this.radius)*(ball.radius + this.radius));
-        const lineLength =    Math.sqrt(lineLengthSq);
+
+
+        const lineDX = (this.x - ball.x);
+        const lineDY = (this.y - ball.y);
+        const lineLengthSq = Math.max(lineDX * lineDX + lineDY * lineDY, (ball.radius + this.radius) * (ball.radius + this.radius));
+        const lineLength = Math.sqrt(lineLengthSq);
 
         const thisForce = this.attractionGravitationalConstant * ball.mass / lineLengthSq
         const otherForce = this.attractionGravitationalConstant * this.mass / lineLengthSq
 
         //console.log(thisForce, otherForce);
-        this.updateDirection([ this.direction[0] - thisForce * (lineDX/lineLength) , this.direction[1] - thisForce * (lineDY/lineLength)])
-        ball.updateDirection([ ball.direction[0] + otherForce * (lineDX/lineLength) , ball.direction[1] + otherForce * (lineDY/lineLength)])
+        this.updateDirection([this.direction[0] - thisForce * (lineDX / lineLength), this.direction[1] - thisForce * (lineDY / lineLength)])
+        ball.updateDirection([ball.direction[0] + otherForce * (lineDX / lineLength), ball.direction[1] + otherForce * (lineDY / lineLength)])
 
     }
     setScale(newScale: number) {
@@ -107,7 +108,7 @@ export class Ball {
             //this.updateDirection([(- this.direction[0]), (this.direction[1] + this.gravity)])
 
         }
-        if ( this.y + this.direction[1] > this.bounds[1] - this.radius) {
+        if (this.y + this.direction[1] > this.bounds[1] - this.radius) {
             //this.updateDirection([(this.direction[0]), (-this.direction[1] + this.gravity)])
 
 
@@ -117,7 +118,7 @@ export class Ball {
                 this.direction[0],
                 (this.direction[1] + ( //this.isFrozen ? 0 : 
                     this.gravity))])
-             
+
             this.applyFriction(this.airFriction)
 
         }
@@ -227,7 +228,7 @@ export class Ball {
                     left: `${this.renderPosition[0] - this.radius}px`,
                     top: `${this.renderPosition[1] - this.radius}px`,
                     backgroundColor: this.color,
-                    boxShadow:  `${this.shouldGlow ? `0px 0px 35px 10px  ${this.color}` : "none"}`,
+                    boxShadow: `${this.shouldGlow ? `0px 0px 35px 10px  ${this.color}` : "none"}`,
                     scale: `${1 / this.scale}`
                 }}
             >

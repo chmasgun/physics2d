@@ -224,7 +224,8 @@ function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string,
             gravity: gravity, 
             airFriction: airFriction,
             mass:0,
-            shouldGlow:false
+            shouldGlow:false,
+            attractionGravitationalConstant:0
         })
     );
 }
