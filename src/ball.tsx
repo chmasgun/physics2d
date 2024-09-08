@@ -11,11 +11,12 @@ export class Ball {
     private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string ) {
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number ) {
         this.direction = direction;
         this.bounds = bounds;
         this.color = color==="random" ? getRandomColor() : color;
         this.radius = radius;
+        this.gravity= gravity;
 
     }
     public getRadius(): number {

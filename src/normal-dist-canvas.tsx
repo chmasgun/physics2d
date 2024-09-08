@@ -7,7 +7,7 @@ const fieldSize: [number, number] = [1000, 900]
 //const ballRadius: number = 3
 const speedFactor: number = 0
 const noOfBalls: number = 500
-
+const gravity: number= 0.025
 
 const bottleneckWidth: number = 120;
 const bottleneckY = 250;
@@ -43,7 +43,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     useEffect(() => {
         const newSpawnArea: [[number, number], [number, number]] = [[200, 800], [- ballCount * ballRadius * ballRadius * 1.3, 0]]
         // Initialize balls based on ballCount
-        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea)
+        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea, gravity)
 
         setBallsInBins(Array.from(Array(bins).keys()).map(x=>  {return 0}))
         setSpawnArea(newSpawnArea)
@@ -109,7 +109,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     function handleRestart() {
         console.log(ballCount, ballRadius, ballGenerator, spawnArea);
-        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, spawnArea)
+        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, spawnArea, gravity)
        
         setBallsInBins(Array.from(Array(bins).keys()).map(x=>  {return 0}))
         setBalls(initialBalls)
@@ -210,7 +210,7 @@ function getObstacles(ballRadius: number , binWidth: number, setBallsInBins:any,
 }
 
 
-function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]]) {
+function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]], gravity:number) {
 
     return Array.from(Array(ballCount).keys()).map(x =>
         ballGenerator.createBall({
@@ -219,7 +219,8 @@ function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string,
             direction: [(Math.random() - 0.5) * speedFactor, (Math.random() - 0.5) * speedFactor],
             bounds: fieldSize,
             radius: ballRadius,
-            color : ballColor
+            color : ballColor,
+            gravity: gravity
         })
     );
 }
