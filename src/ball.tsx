@@ -230,7 +230,11 @@ export class Ball {
                     boxShadow:  `${this.shouldGlow ? `0px 0px 35px 10px  ${this.color}` : "none"}`,
                     scale: `${1 / this.scale}`
                 }}
-            ></div>
+            >
+                <svg style={{ overflow: "visible", left: `${this.radius}px`, top: `${this.radius}px`, position: "absolute" }}>
+                    <line x1={0} x2={this.scale * 3 * this.radius * this.direction[0]} y1={0} y2={this.scale * 3 * this.radius * this.direction[1]} stroke={this.color} strokeWidth={1}></line>
+                </svg>
+            </div>
         );
     }
 }
