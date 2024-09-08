@@ -37,7 +37,8 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
                     color : "red",
                     gravity: 0,
                     airFriction:0, 
-                    mass: 1
+                    mass: 1,
+                    shouldGlow: true
                 }),
                 ballGenerator.createBall({
                     x: 700,
@@ -48,7 +49,8 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
                     color : "yellow",
                     gravity: 0,
                     airFriction:0, 
-                    mass: 1
+                    mass: 1,
+                    shouldGlow: true
                 })
                 ,
                 ballGenerator.createBall({
@@ -60,7 +62,8 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
                     color : "cyan",
                     gravity: 0,
                     airFriction:0, 
-                    mass:  1
+                    mass:  1,
+                    shouldGlow: true
                 })
             ]
         ) 
@@ -86,7 +89,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
                     const xymin = Math.min(...ballPos.map(x=> x[1]) , ...ballPos.map(x=> x[0]), 0)
                     const xymax = Math.max(...ballPos.map(x=> x[1]) , ...ballPos.map(x=> x[0]), fieldSize[0])
                     const newScale = (xymax - xymin) / fieldSize[0]
-                    console.log([xymin, xymax, newScale]);
+                    //console.log([xymin, xymax, newScale]);
                     
                     prevBalls.map(ball =>
                     {

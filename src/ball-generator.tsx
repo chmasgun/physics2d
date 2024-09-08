@@ -14,7 +14,7 @@ export class BallGenerator {
   }
 
   // Method to create a Ball instance
-  public createBall({ x, y, direction, bounds, radius, color="random", gravity, airFriction, mass=0 }: { x: number; y: number; direction: [number, number]; bounds: [number, number]; radius: number; color:string; gravity:number; airFriction:number ; mass:number  }): Ball {
-    return new Ball(x, y, direction, bounds, radius, color, gravity, airFriction, mass);
+  public createBall({ x, y, direction, bounds, radius, color="random", gravity, airFriction, mass=0 , shouldGlow=false}: { x: number; y: number; direction: [number, number]; bounds: [number, number]; radius: number; color:string; gravity:number; airFriction:number ; mass:number ; shouldGlow:boolean }): Ball {
+    return new Ball(x, y, direction, bounds, radius, color, gravity, airFriction, mass, shouldGlow);
   }
 }

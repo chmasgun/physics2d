@@ -17,8 +17,9 @@ export class Ball {
     private scale:number = 1
     private attractionGravitationalConstant:number = 420
     private renderPosition: [number, number] = [this.x, this.y]
+    private shouldGlow: boolean = false;
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number,airFriction:number, mass:number=0 ) {
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number,airFriction:number, mass:number=0, shouldGlow:boolean=false ) {
         this.direction = direction;
         this.bounds = bounds;
         this.color = color==="random" ? getRandomColor() : color;
@@ -26,6 +27,7 @@ export class Ball {
         this.gravity= gravity;
         this.airFriction= airFriction;
         this.mass = mass;
+        this.shouldGlow = shouldGlow
 
     }
     public getRadius(): number {
@@ -225,7 +227,7 @@ export class Ball {
                     left: `${this.renderPosition[0] - this.radius}px`,
                     top: `${this.renderPosition[1] - this.radius}px`,
                     backgroundColor: this.color,
-                    boxShadow:`0px 0px 35px 10px  ${this.color}`,
+                    boxShadow:  `${this.shouldGlow ? `0px 0px 35px 10px  ${this.color}` : "none"}`,
                     scale: `${1 / this.scale}`
                 }}
             ></div>
