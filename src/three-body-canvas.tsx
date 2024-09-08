@@ -22,7 +22,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ }) => {
 
     const [mapScale, setMapScale] = useState<number>(1);
     const [balls, setBalls] = useState<Ball[]>([]);
-    const [currentMode, setCurrentMode] = useState<string>("harmonyfast")
+    const [currentMode, setCurrentMode] = useState<string>("quadrastars")
     //const [currentAttractionForce, setCurrentAttractionForce] = useState<number>(0)
     //const [ballTrails, setBallTrails] = useState<>
 
