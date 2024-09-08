@@ -9,8 +9,8 @@ function App() {
   return (
     <div className="App">
 
-        {/* <NormalDistributionSimulationApp></NormalDistributionSimulationApp> */}
-        <ThreeBodyCanvas></ThreeBodyCanvas>
+        <NormalDistributionSimulationApp></NormalDistributionSimulationApp>
+        {/* <ThreeBodyCanvas></ThreeBodyCanvas> */}
     </div>
   );
 }

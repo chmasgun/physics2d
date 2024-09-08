@@ -1,6 +1,8 @@
 import { ReactElement } from "react";
 export class Ball {
     
+    
+    
     private direction: [number, number];
     private bounds: [number, number];
     private color: string;
@@ -12,8 +14,9 @@ export class Ball {
     // private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
     private mass:number;
-    
+    private scale:number = 1
     private attractionGravitationalConstant:number = 420
+    private renderPosition: [number, number] = [this.x, this.y]
 
     constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number,airFriction:number, mass:number=0 ) {
         this.direction = direction;
@@ -76,8 +79,8 @@ export class Ball {
     public applyAttractionForce(ball: Ball) {
          
         
-        const lineDX = this.x - ball.x; 
-        const lineDY = this.y - ball.y;
+        const lineDX =  (this.x - ball.x); 
+        const lineDY =  (this.y - ball.y);
         const lineLengthSq =    Math.max(lineDX * lineDX + lineDY * lineDY , (ball.radius + this.radius)*(ball.radius + this.radius));
         const lineLength =    Math.sqrt(lineLengthSq);
 
@@ -88,6 +91,12 @@ export class Ball {
         this.updateDirection([ this.direction[0] - thisForce * (lineDX/lineLength) , this.direction[1] - thisForce * (lineDY/lineLength)])
         ball.updateDirection([ ball.direction[0] + otherForce * (lineDX/lineLength) , ball.direction[1] + otherForce * (lineDY/lineLength)])
 
+    }
+    setScale(newScale: number) {
+        this.scale = newScale;
+    }
+    setRenderPosition(newPosition: [number, number]) {
+        this.renderPosition = newPosition
     }
 
     // Method to update the position of the ball
@@ -106,6 +115,7 @@ export class Ball {
                 this.direction[0],
                 (this.direction[1] + ( //this.isFrozen ? 0 : 
                     this.gravity))])
+             
             this.applyFriction(this.airFriction)
 
         }
@@ -120,6 +130,8 @@ export class Ball {
         //this.y =  Math.min(this.y + this.direction[1], this.bounds[1] - this.radius) ;
         this.x = this.x + this.direction[0];
         this.y = this.y + this.direction[1];
+        this.renderPosition[0] = this.x;
+        this.renderPosition[1] = this.y;
     }
 
     // Method to check collision with another ball
@@ -210,10 +222,11 @@ export class Ball {
                     // border: "1px solid black",
                     borderRadius: "100px",
                     position: "absolute",
-                    left: `${this.x - this.radius}px`,
-                    top: `${this.y - this.radius}px`,
+                    left: `${this.renderPosition[0] - this.radius}px`,
+                    top: `${this.renderPosition[1] - this.radius}px`,
                     backgroundColor: this.color,
-                    boxShadow:`0px 0px 35px 10px  ${this.color}`
+                    boxShadow:`0px 0px 35px 10px  ${this.color}`,
+                    scale: `${1 / this.scale}`
                 }}
             ></div>
         );
