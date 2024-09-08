@@ -41,7 +41,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     const [spawnArea, setSpawnArea] = useState< [[number, number], [number, number]]>([[0, 0], [0, 0]])
 
     useEffect(() => {
-        const newSpawnArea: [[number, number], [number, number]] = [[200, 800], [- ballCount * ballRadius * ballRadius, 0]]
+        const newSpawnArea: [[number, number], [number, number]] = [[200, 800], [- ballCount * ballRadius * ballRadius * 1.3, 0]]
         // Initialize balls based on ballCount
         const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea)
 

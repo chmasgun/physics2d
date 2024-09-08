@@ -47,6 +47,7 @@ const NormalDistributionSetupPopup: React.FC<NormalDistributionSetupPopupProps> 
             </label>
             <br />
             <button onClick={handleSubmit}>Start Simulation</button>
+            <span style={{color:"red", fontSize:"12px"}}>{ballCount>600  ? "*Having too many balls might impact the performance":""}</span>
         </div>
     );
 };
