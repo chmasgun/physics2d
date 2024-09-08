@@ -15,7 +15,7 @@ export class Ball {
     
     private attractionGravitationalConstant:number = 420
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, airFriction:number,gravity:number, mass:number=0 ) {
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color:string, gravity:number,airFriction:number, mass:number=0 ) {
         this.direction = direction;
         this.bounds = bounds;
         this.color = color==="random" ? getRandomColor() : color;
