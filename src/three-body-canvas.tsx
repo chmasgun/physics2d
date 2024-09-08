@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
-import { CircularObstacle, LinearObstacle, Obstacle, RectangularObstacle } from './Obstacle';
+import { ball_configs } from './three-body-start-configs';
 
 const fieldSizeForSquare = 900
 
@@ -25,50 +25,51 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({   }) => {
 
     const speed = 0.5
     useEffect(() => {
-        
+        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]
         setBalls(
-            [
-                 ballGenerator.createBall({
-                    x: 300,
-                    y: 350,
-                    direction: [ 1  * speed , -speed * Math.sqrt(3)],
-                    bounds: fieldSize,
-                    radius: 10,
-                    color : "red",
-                    gravity: 0,
-                    airFriction:0, 
-                    mass: 1,
-                    shouldGlow: true
-                }),
-                ballGenerator.createBall({
-                    x: 700,
-                    y: 350,
-                    direction: [ 1 *speed ,  speed * Math.sqrt(3) ],
-                    bounds: fieldSize,
-                    radius: 10,
-                    color : "yellow",
-                    gravity: 0,
-                    airFriction:0, 
-                    mass: 1,
-                    shouldGlow: true
-                })
-                ,
-                ballGenerator.createBall({
-                    x: 500,
-                    y: 350 + 200 * Math.sqrt(3),
-                    direction: [-2  * speed,  0],
-                    bounds: fieldSize,
-                    radius: 10,
-                    color : "cyan",
-                    gravity: 0,
-                    airFriction:0, 
-                    mass:  1,
-                    shouldGlow: true
-                })
-            ]
-        ) 
- 
-    }, [ ]);
+             ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({...x, bounds: fieldSize})) 
+            // [
+            //     ballGenerator.createBall({
+            //         x: 250,
+            //         y: 333,
+            //         direction: [1 * speed, -speed * Math.sqrt(3)],
+            //         bounds: fieldSize,
+            //         radius: 10,
+            //         color: "red",
+            //         gravity: 0,
+            //         airFriction: 0,
+            //         mass: 1,
+            //         shouldGlow: true
+            //     }),
+            //     ballGenerator.createBall({
+            //         x: 650,
+            //         y: 333,
+            //         direction: [1 * speed, speed * Math.sqrt(3)],
+            //         bounds: fieldSize,
+            //         radius: 10,
+            //         color: "yellow",
+            //         gravity: 0,
+            //         airFriction: 0,
+            //         mass: 1,
+            //         shouldGlow: true
+            //     })
+            //     ,
+            //     ballGenerator.createBall({
+            //         x: 450,
+            //         y: 333 + 200 * Math.sqrt(3),
+            //         direction: [-2  * speed, 0],
+            //         bounds: fieldSize,
+            //         radius: 10,
+            //         color: "cyan",
+            //         gravity: 0,
+            //         airFriction: 0,
+            //         mass: 1,
+            //         shouldGlow: true
+            //     })
+            // ]
+        )
+
+    }, []);
 
     useEffect(() => {
         let animationFrameId: number;
