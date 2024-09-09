@@ -141,6 +141,9 @@ export class Ball {
         //this.y =  Math.min(this.y + this.direction[1], this.bounds[1] - this.radius) ;
         this.x = this.x + this.direction[0];
         this.y = this.y + this.direction[1];
+
+        // this.x = Math.ceil( 10000* this.x) / 10000
+        // this.y = Math.ceil( 10000* this.y) / 10000
         this.renderPosition[0] = this.x; // this part is for normal distribution
         this.renderPosition[1] = this.y; // this part is for normal distribution
 
@@ -255,7 +258,7 @@ export class Ball {
                 }}
             >
                 { this.trailEnabled && <svg style={{ overflow: "visible", left: `${this.radius}px`, top: `${this.radius}px`, position: "absolute" , zIndex:"-1"}}>
-                    <line x1={0} x2={  3 * this.radius * this.direction[0]} y1={0} y2={  3 * this.radius * this.direction[1]} stroke={this.color} strokeWidth={1}></line>
+                    <line x1={0} x2={  this.direction[0]} y1={0} y2={    this.direction[1]} stroke={this.color} strokeWidth={1}></line>
                     {/* style={{filter :"drop-shadow( 0px 0px 20px  rgb(2,200,200 ))", zIndex:"-"}} */}
                     <path  d={this.pathData} strokeWidth={3} stroke={this.color} fill="transparent" />
                 </svg>

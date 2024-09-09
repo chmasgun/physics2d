@@ -9,7 +9,7 @@ const fieldSize: [number, number] = [fieldSizeForSquare, fieldSizeForSquare]
 
 const customBalls = []
 
-type CanvasProps = {};
+type CanvasProps = { modeSelected:string; resetParamsCallback:() => void; };
 
 const fps = 60
 
@@ -17,12 +17,12 @@ const fps = 60
 
 
 
-const ThreeBodyCanvas: React.FC<CanvasProps> = ({ }) => {
+const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback }) => {
     const ballGenerator = BallGenerator.getInstance();
 
     const [mapScale, setMapScale] = useState<number>(1);
     const [balls, setBalls] = useState<Ball[]>([]);
-    const [currentMode, setCurrentMode] = useState<string>("quadrastars")
+    const [currentMode, setCurrentMode] = useState<string>(modeSelected)
     //const [currentAttractionForce, setCurrentAttractionForce] = useState<number>(0)
  
     const [isTrailEnabled, setIsTrailEnabled] = useState<boolean>(true)
