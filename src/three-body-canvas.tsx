@@ -24,17 +24,17 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ }) => {
     const [balls, setBalls] = useState<Ball[]>([]);
     const [currentMode, setCurrentMode] = useState<string>("quadrastars")
     //const [currentAttractionForce, setCurrentAttractionForce] = useState<number>(0)
-    //const [ballTrails, setBallTrails] = useState<>
-
+ 
+    const [isTrailEnabled, setIsTrailEnabled] = useState<boolean>(true)
      
     const speed = 0.5
     useEffect(() => {
         const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]
         setBalls(
-             ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({...x, bounds: fieldSize, attractionGravitationalConstant:currentAttractionForce})) 
+             ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({...x, bounds: fieldSize, attractionGravitationalConstant:currentAttractionForce, trailEnabled:isTrailEnabled})) 
              
         )
-
+ 
     }, []);
 
     useEffect(() => {
@@ -65,15 +65,15 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ }) => {
                     const xscale = Math.abs(xmin) > xmax ? (fieldSize[0] - 2 * xmin) / fieldSize[0] : (2 * xmax + fieldSize[0]) / fieldSize[0]
                     const newScale = Math.max(...[yscale, xscale])
                     //console.log(ballPos.map(x => x[0])); 
-                    console.log([xmin, xymin, xscale, yscale, newScale]);
+                    //console.log([xmin, xymin, xscale, yscale, newScale]);
 
                     setMapScale(newScale)
 
                     prevBalls.map(ball => {
                         
                         ball.setRenderPosition([
-                            fieldSize[0] / 2 + (ball.x - 0  - fieldSize[0] / 2) / newScale,
-                            fieldSize[0] / 2 + (ball.y -  0 - fieldSize[0] / 2) / newScale
+                            fieldSize[0] / 2 + (ball.x - fieldSize[0] / 2) / newScale,
+                            fieldSize[0] / 2 + (ball.y - fieldSize[0] / 2) / newScale
                         ]);
                         ball.setScale(newScale);
                     })
@@ -117,7 +117,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ }) => {
 
                  <div style={{position:"relative" , margin: "auto" ,width: `${(1/ mapScale) * fieldSize[0] / 2}px`, height: `${(1 / mapScale) * fieldSize[1] / 2}px`}}>{
                     Array.from(Array(7).keys()).map((x)=> {
-                        return <div style={{ position: "absolute", width: `${ x *100}%`, height:  `${ x *100}%`, left: `-${ (x-1) *50}%`, top: `-${ (x-1) *50}%`, margin: "auto", background: "#fafafa04", borderRadius: "100%" }}></div>
+                        return <div  key={x} style={{ position: "absolute", width: `${ x *100}%`, height:  `${ x *100}%`, left: `-${ (x-1) *50}%`, top: `-${ (x-1) *50}%`, margin: "auto", background: "#fafafa04", borderRadius: "100%" }}></div>
                     })
                 }</div>  
                

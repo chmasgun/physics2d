@@ -76,14 +76,13 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         }]
     },
-
     "twinstars": {
-        "attractionGravitationalConstant": 600,
+        "attractionGravitationalConstant": 400,
         "ballCount": 2,
         "balls": [{
             x: 600,
             y: 450,
-            direction: [0, -3],
+            direction: [0, -2],
             radius: 10,
             color: "#ddd",
             gravity: 0,
@@ -94,7 +93,7 @@ export const ball_configs: Record<string, any> =
         {
             x: 300,
             y: 450,
-            direction: [0, 3],
+            direction: [0, 2],
             radius: 10,
             color: "#ddd",
             gravity: 0,
@@ -112,7 +111,7 @@ export const ball_configs: Record<string, any> =
                 y: 300,
                 direction: [ -1, 1],
                 radius: 10,
-                color: "#ddd",
+                color: "cornflowerblue", 
                 gravity: 0,
                 airFriction: 0,
                 mass: 5,
@@ -123,7 +122,7 @@ export const ball_configs: Record<string, any> =
                 y: 600,
                 direction: [ 1, 1],
                 radius: 10,
-                color: "#ddd",
+                color: "limegreen",
                 gravity: 0,
                 airFriction: 0,
                 mass: 5,
@@ -134,7 +133,7 @@ export const ball_configs: Record<string, any> =
                 y: 600,
                 direction: [ 1, -1],
                 radius: 10,
-                color: "#ddd",
+                color: "salmon",
                 gravity: 0,
                 airFriction: 0,
                 mass: 5,
@@ -145,7 +144,7 @@ export const ball_configs: Record<string, any> =
                 y: 300,
                 direction: [ -1, -1 ],
                 radius: 10,
-                color: "#ddd",
+                color: "#eee",
                 gravity: 0,
                 airFriction: 0,
                 mass: 5,

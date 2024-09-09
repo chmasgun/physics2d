@@ -18,8 +18,12 @@ export class Ball {
     private attractionGravitationalConstant: number = 420
     private renderPosition: [number, number] = [this.x, this.y]
     private shouldGlow: boolean = false;
+    private trailEnabled: boolean = false;
+    private trail: number[][] = [[0,0]];
+    private pathData: string="";
 
-    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color: string, gravity: number, airFriction: number, mass: number = 0, shouldGlow: boolean = false, attractionGravitationalConstant: number = 0) {
+    
+    constructor(public x: number, public y: number, direction: [number, number] = [0, 0], bounds: [number, number] = [0, 0], radius: number = 10, color: string, gravity: number, airFriction: number, mass: number = 0, shouldGlow: boolean = false, attractionGravitationalConstant: number = 0, trailEnabled:boolean=false) {
         this.direction = direction;
         this.bounds = bounds;
         this.color = color === "random" ? getRandomColor() : color;
@@ -29,6 +33,8 @@ export class Ball {
         this.mass = mass;
         this.shouldGlow = shouldGlow
         this.attractionGravitationalConstant = attractionGravitationalConstant
+        this.trail= [[0,0]]
+        this.trailEnabled = trailEnabled
 
     }
     public getRadius(): number {
@@ -76,6 +82,7 @@ export class Ball {
     public destroy(): void {
         this.radius = 0;
         this.y = 100000
+        this.trailEnabled = false;
 
     }
 
@@ -100,6 +107,7 @@ export class Ball {
     }
     setRenderPosition(newPosition: [number, number]) {
         this.renderPosition = newPosition
+        
     }
 
     // Method to update the position of the ball
@@ -133,8 +141,21 @@ export class Ball {
         //this.y =  Math.min(this.y + this.direction[1], this.bounds[1] - this.radius) ;
         this.x = this.x + this.direction[0];
         this.y = this.y + this.direction[1];
-        this.renderPosition[0] = this.x;
-        this.renderPosition[1] = this.y;
+        this.renderPosition[0] = this.x; // this part is for normal distribution
+        this.renderPosition[1] = this.y; // this part is for normal distribution
+
+
+        if(this.trailEnabled){
+
+            this.trail = this.trail.map( x => [x[0] -  this.direction[0] , x[1] -  this.direction[1]])
+            this.trail.push([0,0])
+            if(this.trail.length> 240){ this.trail.shift()}
+            this.pathData = this.trail.map((point, index) => {
+                const [x, y] = point;
+                return `${index === 0 ? 'M' : 'L'}${x} ${y}`;
+            }).join(' ');
+        }
+        
     }
 
     // Method to check collision with another ball
@@ -229,12 +250,16 @@ export class Ball {
                     top: `${this.renderPosition[1] - this.radius}px`,
                     backgroundColor: this.color,
                     boxShadow: `${this.shouldGlow ? `0px 0px 35px 10px  ${this.color}` : "none"}`,
-                    scale: `${1 / this.scale}`
+                    scale: `${1 / this.scale}`,
+                    zIndex: "1"
                 }}
             >
-                <svg style={{ overflow: "visible", left: `${this.radius}px`, top: `${this.radius}px`, position: "absolute" }}>
-                    <line x1={0} x2={this.scale * 3 * this.radius * this.direction[0]} y1={0} y2={this.scale * 3 * this.radius * this.direction[1]} stroke={this.color} strokeWidth={1}></line>
+                { this.trailEnabled && <svg style={{ overflow: "visible", left: `${this.radius}px`, top: `${this.radius}px`, position: "absolute" , zIndex:"-1"}}>
+                    <line x1={0} x2={  3 * this.radius * this.direction[0]} y1={0} y2={  3 * this.radius * this.direction[1]} stroke={this.color} strokeWidth={1}></line>
+                    {/* style={{filter :"drop-shadow( 0px 0px 20px  rgb(2,200,200 ))", zIndex:"-"}} */}
+                    <path  d={this.pathData} strokeWidth={3} stroke={this.color} fill="transparent" />
                 </svg>
+                }
             </div>
         );
     }
