@@ -55,7 +55,8 @@ const SimulationSelectionVisual: React.FC<SimulationSelectionDivVisualProps> = (
             resetParamsCallback={() => { }}
             enableInfoPopup={false}
             mapScale={0.22}
-            gravity={0.006} />
+            gravity={0.006}
+            autoRestartOnFinish={true} />
         :
         appId === 1 ?
             <ThreeBodyCanvas

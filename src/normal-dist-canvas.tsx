@@ -19,7 +19,8 @@ type CanvasProps = {
     resetParamsCallback: () => void,
     enableInfoPopup: boolean,
     mapScale:number,
-    gravity:number
+    gravity:number,
+    autoRestartOnFinish:boolean
 };
 
 
@@ -27,7 +28,7 @@ type CanvasProps = {
 
 
 
-const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback, enableInfoPopup = true, mapScale, gravity }) => {
+const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback, enableInfoPopup = true, mapScale, gravity, autoRestartOnFinish="false" }) => {
     
     
     
@@ -54,6 +55,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     const [ballsInBins, setBallsInBins] = useState<number[]>(Array.from(Array(bins).keys()).map(x => { return 0 }))
     const [ballsRemaining, setBallsRemaining] = useState<number>(noOfBalls)
+    const [simulationFinished, setSimulationFinished] = useState<boolean>(false)
     const [balls, setBalls] = useState<Ball[]>([]);
     const [spawnArea, setSpawnArea] = useState<[[number, number], [number, number]]>([[0, 0], [0, 0]])
 
@@ -72,8 +74,8 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     //const ballsInBinsTotal = ballsInBins.reduce((partialsum, a) => partialsum+a, 0)
     const ballsInBinsMax = Math.max(...ballsInBins)
-    const ballsInBinsPerc = ballsInBins.map(x => x / ballsInBinsMax)
-
+    const ballsInBinsPerc = ballsInBins.map(x => x / (ballsInBinsMax+ 0.00001))
+   
     useEffect(() => {
         let animationFrameId: number;
 
@@ -83,14 +85,18 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
             setBalls(prevBalls => {
                 //var startTime = performance.now();
                 let localBallsLeft = 0;
+                let movingBallsLeft = 0;
                 const newBalls = prevBalls.map(ball => {
                     ball.updatePosition();
                     ball.setTouchingWall(false)
                     localBallsLeft += (1 - ball.isInTheScene());
+                    movingBallsLeft += (1 - ball.getShouldStopMoving());
                     return ball;
                 });
                 tempBallsLeft = localBallsLeft;
                 setBallsRemaining(tempBallsLeft)
+                setSimulationFinished( movingBallsLeft ===  0)
+
                 for (let ball of newBalls) {
                     for (let obstacle of obstacles) {
                         if (obstacle.checkCollision(ball)) {
@@ -118,18 +124,29 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
             animationFrameId = requestAnimationFrame(updateBalls);
         };
-
+        
         animationFrameId = requestAnimationFrame(updateBalls);
+        
+        if(autoRestartOnFinish){  // if auto restart is enabled, e.g in preview mode
+            if(simulationFinished){
+                setTimeout(() => {
+                    handleRestart()
+                } , 2000) 
+                
+            } 
+        }
+        
 
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
-    }, []);
+    }, [simulationFinished]);
 
     function handleRestart() {
         console.log(ballCount, ballRadius, ballGenerator, spawnArea);
         const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, spawnArea, gravity, fieldSize)
 
-        setBallsInBins(Array.from(Array(bins).keys()).map(x => { return 0 }))
+        setBallsInBins([...Array.from(Array(bins).keys()).map(x => { return 0 })])
         setBalls(initialBalls)
+        setSimulationFinished(false)
     }
 
     return (

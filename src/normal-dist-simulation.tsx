@@ -34,7 +34,8 @@ const NormalDistributionSimulationApp: React.FC<AppSelectorProps> = ({setSelecte
                 resetParamsCallback={resetParamsCallback}
                 enableInfoPopup={true} 
                 mapScale={1}
-                gravity={0.025}/>}
+                gravity={0.025}
+                autoRestartOnFinish={false} />}
         </div>
     );
 };

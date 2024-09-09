@@ -80,6 +80,9 @@ export class Ball {
         return this.y > 0 ? 1 : 0;
     }
 
+    public getShouldStopMoving() :number{
+        return this.shouldStopMoving  ? 1 : 0;
+    }
     public destroy(): void {
         this.radius = 0;
         this.y = 100000
