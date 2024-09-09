@@ -47,6 +47,7 @@
   transition: background-color 0.3s;
   align-items: center;
   padding: 0.5rem;
+  gap:1rem;
 
   &:hover {
     background-color: #eee;

@@ -1,7 +1,43 @@
 
 
 export const ball_configs: Record<string, any> =
-{
+{   "preview": {
+        "attractionGravitationalConstant": 75,
+        "ballCount": 3,
+        "balls": [{
+            x: 50,
+            y: 60,
+            direction: [1 * 0.3, -0.3 * Math.sqrt(3)],
+            radius: 4,
+            color: "red",
+            gravity: 0,
+            airFriction: 0,
+            mass: 1,
+            shouldGlow: true
+        },
+        {
+            x: 150,
+            y: 60,
+            direction: [1 * 0.3, 0.3 * Math.sqrt(3)],
+            radius: 4,
+            color: "yellow",
+            gravity: 0,
+            airFriction: 0,
+            mass: 1,
+            shouldGlow: true
+        },
+        {
+            x: 100,
+            y: 60 + 50 * Math.sqrt(3),
+            direction: [-2 * 0.3, 0],
+            radius: 4,
+            color: "cyan",
+            gravity: 0,
+            airFriction: 0,
+            mass: 1,
+            shouldGlow: true
+        }]
+    },
     "harmony": {
         "attractionGravitationalConstant": 420,
         "ballCount": 3,

@@ -3,13 +3,11 @@ import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
 import { ball_configs } from './three-body-start-configs';
 
-const fieldSizeForSquare = 900
 
-const fieldSize: [number, number] = [fieldSizeForSquare, fieldSizeForSquare]
 
 const customBalls = []
 
-type CanvasProps = { modeSelected: string; resetParamsCallback: () => void; enableInfoPopup: boolean };
+type CanvasProps = { modeSelected: string; resetParamsCallback: () => void; enableInfoPopup: boolean , mapScaleOuter:number};
 
 const fps = 60
 
@@ -17,10 +15,12 @@ const fps = 60
 
 
 
-const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback, enableInfoPopup = true }) => {
+const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback, enableInfoPopup = true, mapScaleOuter }) => {
+    const fieldSizeForSquare = 900 * mapScaleOuter
+    const fieldSize: [number, number] = [fieldSizeForSquare, fieldSizeForSquare]
     const ballGenerator = BallGenerator.getInstance();
 
-    const [mapScale, setMapScale] = useState<number>(1);
+    const [mapScaleInner, setMapScaleInner] = useState<number>(1);
     const [balls, setBalls] = useState<Ball[]>([]);
     const [currentMode, setCurrentMode] = useState<string>(modeSelected)
     //const [currentAttractionForce, setCurrentAttractionForce] = useState<number>(0)
@@ -75,7 +75,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
                     //console.log(ballPos.map(x => x[0])); 
                     //console.log([xmin, xymin, xscale, yscale, newScale]);
 
-                    setMapScale(newScale)
+                    setMapScaleInner(newScale)
 
                     prevBalls.map(ball => {
 
@@ -115,7 +115,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
     return (
         // , minHeight: "100svh", minWidth: "100svw"
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", background:"#111", height:"100%" }}>
             <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, margin: "auto", display: "flex" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
@@ -124,7 +124,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
                 ))}
 
-                <div style={{ position: "relative", margin: "auto", width: `${(1 / mapScale) * fieldSize[0] / 2}px`, height: `${(1 / mapScale) * fieldSize[1] / 2}px` }}>{
+                <div style={{ position: "relative", margin: "auto", width: `${(1 / mapScaleInner) * fieldSize[0] / 2}px`, height: `${(1 / mapScaleInner) * fieldSize[1] / 2}px` }}>{
                     Array.from(Array(7).keys()).map((x) => {
                         return <div key={x} style={{ position: "absolute", width: `${x * 100}%`, height: `${x * 100}%`, left: `-${(x - 1) * 50}%`, top: `-${(x - 1) * 50}%`, margin: "auto", background: "#fafafa04", borderRadius: "100%" }}></div>
                     })
