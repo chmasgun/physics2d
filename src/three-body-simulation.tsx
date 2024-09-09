@@ -8,8 +8,11 @@ interface SimulationParams {
     
 }
 
+interface AppSelectorProps {
+    setSelectedApp: (app: number) => void;
+  }
 
-const ThreeBodySimulationApp: React.FC = () => {
+const ThreeBodySimulationApp: React.FC<AppSelectorProps> = ({setSelectedApp}) => {
     const [simulationParams, setSimulationParams] = useState<SimulationParams | null>(null);
 
     const handleSetupSubmit = (params: SimulationParams) => {
@@ -21,7 +24,7 @@ const ThreeBodySimulationApp: React.FC = () => {
 
     return (
         <div>
-            {!simulationParams && <ThreeBodySetupPopup onSubmit={handleSetupSubmit} />}
+            {!simulationParams && <ThreeBodySetupPopup onSubmit={handleSetupSubmit} setSelectedApp={setSelectedApp} />}
             {simulationParams && <ThreeBodyCanvas
                 modeSelected={"harmony"}
                 resetParamsCallback={resetParamsCallback} />}

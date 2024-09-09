@@ -37,6 +37,14 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
  
     }, []);
 
+    function handleRestart() {
+        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]
+        setBalls(
+            ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({...x, bounds: fieldSize, attractionGravitationalConstant:currentAttractionForce, trailEnabled:isTrailEnabled})) 
+            
+       )
+    }
+
     useEffect(() => {
         let animationFrameId: number;
         let lastTime = performance.now();
@@ -121,6 +129,13 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
                     })
                 }</div>  
                
+            </div>
+
+
+            <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem" }}>
+                 
+                <div onClick={() => handleRestart()} style={{background:"lightgreen", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Restart the simulation</div>
+                <div onClick={() => resetParamsCallback()} style={{background:"pink", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Reset the parameters</div>
             </div>
         </div>
     );

@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+
+.app-selector-option{
+   display: flex ;
+   flex-direction: column;
+    cursor:pointer;
+    transition: background-color 0.3s;
+    
+    &:hover{
+      background-color: #eee;
+    }
+}

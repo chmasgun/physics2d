@@ -3,33 +3,38 @@ import { BallGenerator } from './ball-generator';
 import { Ball } from './ball';
 import { CircularObstacle, LinearObstacle, Obstacle, RectangularObstacle } from './Obstacle';
 
-const fieldSize: [number, number] = [1000, 900]
 //const ballRadius: number = 3
 const speedFactor: number = 0
 const noOfBalls: number = 500
 const gravity: number= 0.025
 const airFriction: number = 0.012
 
-const bottleneckWidth: number = 120;
-const bottleneckY = 250;
-
-const binFullWidth = 520
-const binStartOffsetWithCircles = 150
-const binStartEndX = [(fieldSize[0] - binFullWidth) / 2, (fieldSize[0] + binFullWidth) / 2]
-const binStartEndY = [800, fieldSize[1]]
 
 
 const customBalls = []
 
-type CanvasProps = { ballCount: number, ballRadius: number,ballColor:string,resetParamsCallback:() => void };
+type CanvasProps = { 
+    ballCount: number, 
+    ballRadius: number,
+    ballColor:string,
+    resetParamsCallback:() => void, 
+    enableInfoPopup:boolean };
+    
+    
+    
+    
+    const fieldSize: [number, number] = [1000, 900]
+    
+    const bottleneckWidth: number = 120;
+    const bottleneckY = 250;
+    
+    const binFullWidth = 520
+    const binStartOffsetWithCircles = 150
+    const binStartEndX = [(fieldSize[0] - binFullWidth) / 2, (fieldSize[0] + binFullWidth) / 2]
+    const binStartEndY = [800, fieldSize[1]]
 
 
-
-
-
-
-
-const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback }) => {
+const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback , enableInfoPopup=true}) => {
     const ballGenerator = BallGenerator.getInstance();
     
     const binWidth = ballRadius * 3 - 1
@@ -42,7 +47,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     const [spawnArea, setSpawnArea] = useState< [[number, number], [number, number]]>([[0, 0], [0, 0]])
 
     useEffect(() => {
-        const newSpawnArea: [[number, number], [number, number]] = [[200, 800], [- ballCount * ballRadius * ballRadius * 1.3, 0]]
+        const newSpawnArea: [[number, number], [number, number]] = [[fieldSize[0] * 0.2, fieldSize[0] * 0.8], [- ballCount * ballRadius * ballRadius * 1.3, 0]]
         // Initialize balls based on ballCount
         const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea, gravity)
 
@@ -117,7 +122,8 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     }
 
     return (
-        <div style={{ display: "flex", alignItems: "center", background: "#ddd", minHeight: "100svh" }}>
+        // , minHeight: "100svh"
+        <div style={{ display: "flex", alignItems: "center", background: "#ddd" }}> 
             <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "white", margin: "auto" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
@@ -140,13 +146,14 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
                         )}
                 </div>
             </div>
-
+                        {enableInfoPopup && 
             <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem" }}>
                 <span>Remaining balls</span>
                 <span>{ballsRemaining}</span>
                 <div onClick={() => handleRestart()} style={{background:"lightgreen", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Restart the simulation</div>
                 <div onClick={() => resetParamsCallback()} style={{background:"pink", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Reset the parameters</div>
             </div>
+            }
         </div>
     );
 };
@@ -185,8 +192,8 @@ function getObstacles(ballRadius: number , binWidth: number, setBallsInBins:any,
 
     return [
 
-        new LinearObstacle(200, 0, (fieldSize[0] - bottleneckWidth) / 2, bottleneckY, 0.01),
-        new LinearObstacle(fieldSize[0] - 200, 0, (fieldSize[0] + bottleneckWidth) / 2, bottleneckY, 0.01),
+        new LinearObstacle( fieldSize[0] * 0.2, 0, (fieldSize[0] - bottleneckWidth) / 2, bottleneckY, 0.01),
+        new LinearObstacle(fieldSize[0] * 0.8, 0, (fieldSize[0] + bottleneckWidth) / 2, bottleneckY, 0.01),
         new LinearObstacle((fieldSize[0] - bottleneckWidth) / 2, bottleneckY, binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, 0.02),
         new LinearObstacle((fieldSize[0] + bottleneckWidth) / 2, bottleneckY, binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, 0.02),
 

@@ -14,10 +14,10 @@ function App() {
     <div className="App">
       {
         selectedApp === 0 ? (
-          <NormalDistributionSimulationApp />
+          <NormalDistributionSimulationApp setSelectedApp={setSelectedApp} />
         ) : (
           selectedApp === 1 ?
-            <ThreeBodySimulationApp></ThreeBodySimulationApp>
+            <ThreeBodySimulationApp setSelectedApp={setSelectedApp}></ThreeBodySimulationApp>
             :
             <AppSelector setSelectedApp={setSelectedApp}></AppSelector>
         )}

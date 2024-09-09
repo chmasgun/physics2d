@@ -9,9 +9,12 @@ interface SimulationParams {
     ballRadius: number;
     ballColor: string;
 }
+interface AppSelectorProps {
+    setSelectedApp: (app: number) => void;
+  }
 
 
-const NormalDistributionSimulationApp: React.FC = () => {
+const NormalDistributionSimulationApp: React.FC<AppSelectorProps> = ({setSelectedApp}) => {
     const [simulationParams, setSimulationParams] = useState<SimulationParams | null>(null);
 
     const handleSetupSubmit = (params: SimulationParams) => {
@@ -23,12 +26,13 @@ const NormalDistributionSimulationApp: React.FC = () => {
 
     return (
         <div>
-            {!simulationParams && <NormalDistributionSetupPopup onSubmit={handleSetupSubmit} />}
+            {!simulationParams && <NormalDistributionSetupPopup onSubmit={handleSetupSubmit} setSelectedApp={setSelectedApp}/>}
             {simulationParams && <NormalDistributionCanvas
                 ballCount={simulationParams.ballCount}
                 ballRadius={simulationParams.ballRadius}
                 ballColor={simulationParams.ballColor}
-                resetParamsCallback={resetParamsCallback} />}
+                resetParamsCallback={resetParamsCallback}
+                enableInfoPopup={true} />}
         </div>
     );
 };
