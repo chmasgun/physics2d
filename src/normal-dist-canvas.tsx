@@ -6,63 +6,74 @@ import { CircularObstacle, LinearObstacle, Obstacle, RectangularObstacle } from 
 //const ballRadius: number = 3
 const speedFactor: number = 0
 const noOfBalls: number = 500
-const gravity: number= 0.025
 const airFriction: number = 0.012
 
 
 
 const customBalls = []
 
-type CanvasProps = { 
-    ballCount: number, 
+type CanvasProps = {
+    ballCount: number,
     ballRadius: number,
-    ballColor:string,
-    resetParamsCallback:() => void, 
-    enableInfoPopup:boolean };
-    
-    
-    
-    
-    const fieldSize: [number, number] = [1000, 900]
-    
-    const bottleneckWidth: number = 120;
-    const bottleneckY = 250;
-    
-    const binFullWidth = 520
-    const binStartOffsetWithCircles = 150
-    const binStartEndX = [(fieldSize[0] - binFullWidth) / 2, (fieldSize[0] + binFullWidth) / 2]
-    const binStartEndY = [800, fieldSize[1]]
+    ballColor: string,
+    resetParamsCallback: () => void,
+    enableInfoPopup: boolean,
+    mapScale:number,
+    gravity:number
+};
 
 
-const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback , enableInfoPopup=true}) => {
+
+
+
+
+const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback, enableInfoPopup = true, mapScale, gravity }) => {
+    
+    
+    
+    const fieldSize: [number, number] = [600*mapScale, 900*mapScale]
+    
+    const bottleneckWidth: number = 120*mapScale;
+    const bottleneckY = 250*mapScale;
+    
+    const binFullWidth = 520*mapScale
+    const binStartOffsetWithCircles = 150*mapScale
+    const binStartEndX:[number,number] = [(fieldSize[0] - binFullWidth) / 2, (fieldSize[0] + binFullWidth) / 2]
+    const binStartEndY:[number,number] = [800*mapScale, fieldSize[1]]
+    const circularLayerSpacing = 50 * mapScale
+    const circularLayerObstacleRadius = 3* mapScale
+    
+    //const gravity: number = 0.025
+    
+
+
     const ballGenerator = BallGenerator.getInstance();
-    
     const binWidth = ballRadius * 3 - 1
-    const bins = Math.floor((binStartEndX[1] - binStartEndX[0]) / binWidth)  
-    const realizedBinWidth = (binStartEndX[1] - binStartEndX[0])/ bins
+    const bins = Math.floor((binStartEndX[1] - binStartEndX[0]) / binWidth)
+    const realizedBinWidth = (binStartEndX[1] - binStartEndX[0]) / bins
 
-    const [ballsInBins, setBallsInBins] = useState<number[]>(Array.from(Array(bins).keys()).map(x=> {return 0}))
+    const [ballsInBins, setBallsInBins] = useState<number[]>(Array.from(Array(bins).keys()).map(x => { return 0 }))
     const [ballsRemaining, setBallsRemaining] = useState<number>(noOfBalls)
     const [balls, setBalls] = useState<Ball[]>([]);
-    const [spawnArea, setSpawnArea] = useState< [[number, number], [number, number]]>([[0, 0], [0, 0]])
+    const [spawnArea, setSpawnArea] = useState<[[number, number], [number, number]]>([[0, 0], [0, 0]])
 
     useEffect(() => {
-        const newSpawnArea: [[number, number], [number, number]] = [[fieldSize[0] * 0.2, fieldSize[0] * 0.8], [- ballCount * ballRadius * ballRadius * 1.3, 0]]
+        const newSpawnArea: [[number, number], [number, number]] = [[ 0, fieldSize[0]  ], [- ballCount * ballRadius * ballRadius * 1.3 * (1/mapScale), 0]]
         // Initialize balls based on ballCount
-        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea, gravity)
+        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea, gravity, fieldSize)
 
-        setBallsInBins(Array.from(Array(bins).keys()).map(x=>  {return 0}))
+        setBallsInBins(Array.from(Array(bins).keys()).map(x => { return 0 }))
         setSpawnArea(newSpawnArea)
         setBalls(initialBalls)
- 
+
     }, [ballCount]);
 
-    const obstacles: Obstacle[] = getObstacles(ballRadius, binWidth, setBallsInBins, realizedBinWidth)
+    const obstacles: Obstacle[] = getObstacles(ballRadius, binWidth, setBallsInBins, realizedBinWidth, fieldSize, bottleneckWidth,bottleneckY,binStartEndX,binStartEndY,binStartOffsetWithCircles , circularLayerSpacing, circularLayerObstacleRadius)
 
     //const ballsInBinsTotal = ballsInBins.reduce((partialsum, a) => partialsum+a, 0)
     const ballsInBinsMax = Math.max(...ballsInBins)
-    const ballsInBinsPerc = ballsInBins.map(x => x/ballsInBinsMax)
-    
+    const ballsInBinsPerc = ballsInBins.map(x => x / ballsInBinsMax)
+
     useEffect(() => {
         let animationFrameId: number;
 
@@ -115,15 +126,15 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     function handleRestart() {
         console.log(ballCount, ballRadius, ballGenerator, spawnArea);
-        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, spawnArea, gravity)
-       
-        setBallsInBins(Array.from(Array(bins).keys()).map(x=>  {return 0}))
+        const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, spawnArea, gravity, fieldSize)
+
+        setBallsInBins(Array.from(Array(bins).keys()).map(x => { return 0 }))
         setBalls(initialBalls)
     }
 
     return (
         // , minHeight: "100svh"
-        <div style={{ display: "flex", alignItems: "center", background: "#ddd" }}> 
+        <div style={{ display: "flex", alignItems: "center" , justifyContent:"center", overflow:"clip"}}>
             <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "white", margin: "auto" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
@@ -140,19 +151,19 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
                     ))}
                 </svg>
                 {/* histogram visualization */}
-                <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#5551", transform:"translateY(calc(-100% - 4px))", margin: "auto", display:"flex", alignItems:"flex-end" }}>
-                    {ballsInBinsPerc.map( x => 
-                        <div style={{height:`${100*x}%`, background:"#4e48", flex:1}}> </div>
-                        )}
+                <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#5551", transform: "translateY(calc(-100% - 4px))", margin: "auto", display: "flex", alignItems: "flex-end" }}>
+                    {ballsInBinsPerc.map(x =>
+                        <div style={{ height: `${100 * x}%`, background: "#4e48", flex: 1 }}> </div>
+                    )}
                 </div>
             </div>
-                        {enableInfoPopup && 
-            <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem" }}>
-                <span>Remaining balls</span>
-                <span>{ballsRemaining}</span>
-                <div onClick={() => handleRestart()} style={{background:"lightgreen", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Restart the simulation</div>
-                <div onClick={() => resetParamsCallback()} style={{background:"pink", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Reset the parameters</div>
-            </div>
+            {enableInfoPopup &&
+                <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem", zIndex:"2" }}>
+                    <span>Remaining balls</span>
+                    <span>{ballsRemaining}</span>
+                    <div onClick={() => handleRestart()} style={{ background: "lightgreen", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Restart the simulation</div>
+                    <div onClick={() => resetParamsCallback()} style={{ background: "pink", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Reset the parameters</div>
+                </div>
             }
         </div>
     );
@@ -188,37 +199,46 @@ function EndingBlocks(xstart: number, xend: number, ystart: number, yend: number
 }
 
 
-function getObstacles(ballRadius: number , binWidth: number, setBallsInBins:any, realizedBinWidth:number ) {
+function getObstacles(ballRadius: number, binWidth: number, setBallsInBins: any, realizedBinWidth: number, 
+    fieldSize:[number,number],
+    bottleneckWidth:number,
+    bottleneckY:number,
+    binStartEndX:[number,number],
+    binStartEndY:[number,number],
+    binStartOffsetWithCircles: number ,
+    circularLayerSpacing:number,
+    circularLayerObstacleRadius:number,
+) {
 
     return [
 
-        new LinearObstacle( fieldSize[0] * 0.2, 0, (fieldSize[0] - bottleneckWidth) / 2, bottleneckY, 0.01),
-        new LinearObstacle(fieldSize[0] * 0.8, 0, (fieldSize[0] + bottleneckWidth) / 2, bottleneckY, 0.01),
+        new LinearObstacle(fieldSize[0] * 0.0, 0, (fieldSize[0] - bottleneckWidth) / 2, bottleneckY, 0.01),
+        new LinearObstacle(fieldSize[0] * 1, 0, (fieldSize[0] + bottleneckWidth) / 2, bottleneckY, 0.01),
         new LinearObstacle((fieldSize[0] - bottleneckWidth) / 2, bottleneckY, binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, 0.02),
         new LinearObstacle((fieldSize[0] + bottleneckWidth) / 2, bottleneckY, binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, 0.02),
 
         new LinearObstacle(binStartEndX[0], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[0], binStartEndY[1], 0.1),
         new LinearObstacle(binStartEndX[1], binStartEndY[0] - binStartOffsetWithCircles, binStartEndX[1], binStartEndY[1], 0.1),
 
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 0 * 50, 3, 50, 1),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 1 * 50, 3, 50, 2),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 2 * 50, 3, 50, 3),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 3 * 50, 3, 50, 4),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 4 * 50, 3, 50, 5),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 5 * 50, 3, 50, 6),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 6 * 50, 3, 50, 7),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 7 * 50, 3, 50, 8),
-        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 8 * 50, 3, 50, 9),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 0 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 1),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 1 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 2),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 2 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 3),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 3 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 4),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 4 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 5),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 5 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 6),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 6 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 7),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 7 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 8),
+        ...CircularLayer(fieldSize[0] / 2, bottleneckY + 8 * circularLayerSpacing, circularLayerObstacleRadius, circularLayerSpacing, 9),
 
         ...EndingBlocks(binStartEndX[0], binStartEndX[1], binStartEndY[0], binStartEndY[1], binWidth),
 
-        new LinearObstacle(binStartEndX[0], (binStartEndY[1] + binStartEndY[0])/2, binStartEndX[1], (binStartEndY[1] + binStartEndY[0])/2, 1 , "#fff1",  DroppedBallHandlerHOF(setBallsInBins,  binStartEndX[0], realizedBinWidth)  ),
+        new LinearObstacle(binStartEndX[0], (binStartEndY[1] + binStartEndY[0]) / 2, binStartEndX[1], (binStartEndY[1] + binStartEndY[0]) / 2, 1, "#fff1", DroppedBallHandlerHOF(setBallsInBins, binStartEndX[0], realizedBinWidth)),
 
     ];
 }
 
 
-function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]], gravity:number) {
+function InitializeBalls(ballCount: number, ballRadius: number, ballColor: string, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]], gravity: number, fieldSize:[number,number]) {
 
     return Array.from(Array(ballCount).keys()).map(x =>
         ballGenerator.createBall({
@@ -227,31 +247,31 @@ function InitializeBalls(ballCount: number, ballRadius: number,ballColor:string,
             direction: [(Math.random() - 0.5) * speedFactor, (Math.random() - 0.5) * speedFactor],
             bounds: fieldSize,
             radius: ballRadius,
-            color : ballColor,
-            gravity: gravity, 
+            color: ballColor,
+            gravity: gravity,
             airFriction: airFriction,
-            mass:0,
-            shouldGlow:false,
-            attractionGravitationalConstant:0,
+            mass: 0,
+            shouldGlow: false,
+            attractionGravitationalConstant: 0,
             trailEnabled: false
         })
     );
 }
 
 
-function droppedBallHandleFunction(ball:Ball, setBallsInBins:any , binStartX:number, realizedBinWidth:number){
-    
-    setBallsInBins((prevBins: number[])  =>{
+function droppedBallHandleFunction(ball: Ball, setBallsInBins: any, binStartX: number, realizedBinWidth: number) {
+
+    setBallsInBins((prevBins: number[]) => {
         //console.log(prevBins, ball.x, binStartX, Math.floor( (ball.x - binStartX) / binWidth));
-      
-        prevBins[Math.floor( (ball.x - binStartX  ) / realizedBinWidth)]  ++
+
+        prevBins[Math.floor((ball.x - binStartX) / realizedBinWidth)]++
         return prevBins
     })
 }
-function DroppedBallHandlerHOF(setBallsInBins: any, binStartX:number, realizedBinWidth:number) {
+function DroppedBallHandlerHOF(setBallsInBins: any, binStartX: number, realizedBinWidth: number) {
 
-    
-    return function(ball: Ball) {
-        droppedBallHandleFunction(ball, setBallsInBins,binStartX,realizedBinWidth);
+
+    return function (ball: Ball) {
+        droppedBallHandleFunction(ball, setBallsInBins, binStartX, realizedBinWidth);
     };
 }

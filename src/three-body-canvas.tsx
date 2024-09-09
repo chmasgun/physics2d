@@ -9,7 +9,7 @@ const fieldSize: [number, number] = [fieldSizeForSquare, fieldSizeForSquare]
 
 const customBalls = []
 
-type CanvasProps = { modeSelected:string; resetParamsCallback:() => void; };
+type CanvasProps = { modeSelected: string; resetParamsCallback: () => void; enableInfoPopup: boolean };
 
 const fps = 60
 
@@ -17,32 +17,32 @@ const fps = 60
 
 
 
-const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback }) => {
+const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback, enableInfoPopup = true }) => {
     const ballGenerator = BallGenerator.getInstance();
 
     const [mapScale, setMapScale] = useState<number>(1);
     const [balls, setBalls] = useState<Ball[]>([]);
     const [currentMode, setCurrentMode] = useState<string>(modeSelected)
     //const [currentAttractionForce, setCurrentAttractionForce] = useState<number>(0)
- 
+
     const [isTrailEnabled, setIsTrailEnabled] = useState<boolean>(true)
-     
+
     const speed = 0.5
     useEffect(() => {
         const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]
         setBalls(
-             ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({...x, bounds: fieldSize, attractionGravitationalConstant:currentAttractionForce, trailEnabled:isTrailEnabled})) 
-             
+            ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({ ...x, bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
+
         )
- 
+
     }, []);
 
     function handleRestart() {
         const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]
         setBalls(
-            ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({...x, bounds: fieldSize, attractionGravitationalConstant:currentAttractionForce, trailEnabled:isTrailEnabled})) 
-            
-       )
+            ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({ ...x, bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
+
+        )
     }
 
     useEffect(() => {
@@ -78,7 +78,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
                     setMapScale(newScale)
 
                     prevBalls.map(ball => {
-                        
+
                         ball.setRenderPosition([
                             fieldSize[0] / 2 + (ball.x - fieldSize[0] / 2) / newScale,
                             fieldSize[0] / 2 + (ball.y - fieldSize[0] / 2) / newScale
@@ -114,7 +114,8 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
 
     return (
-        <div style={{ display: "flex", minHeight: "100svh", minWidth: "100svw", overflow:"hidden" }}>
+        // , minHeight: "100svh", minWidth: "100svw"
+        <div style={{ display: "flex" }}>
             <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, margin: "auto", display: "flex" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
@@ -123,20 +124,21 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
                 ))}
 
-                 <div style={{position:"relative" , margin: "auto" ,width: `${(1/ mapScale) * fieldSize[0] / 2}px`, height: `${(1 / mapScale) * fieldSize[1] / 2}px`}}>{
-                    Array.from(Array(7).keys()).map((x)=> {
-                        return <div  key={x} style={{ position: "absolute", width: `${ x *100}%`, height:  `${ x *100}%`, left: `-${ (x-1) *50}%`, top: `-${ (x-1) *50}%`, margin: "auto", background: "#fafafa04", borderRadius: "100%" }}></div>
+                <div style={{ position: "relative", margin: "auto", width: `${(1 / mapScale) * fieldSize[0] / 2}px`, height: `${(1 / mapScale) * fieldSize[1] / 2}px` }}>{
+                    Array.from(Array(7).keys()).map((x) => {
+                        return <div key={x} style={{ position: "absolute", width: `${x * 100}%`, height: `${x * 100}%`, left: `-${(x - 1) * 50}%`, top: `-${(x - 1) * 50}%`, margin: "auto", background: "#fafafa04", borderRadius: "100%" }}></div>
                     })
-                }</div>  
-               
+                }</div>
+
             </div>
 
+            {enableInfoPopup &&
+                <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem" }}>
 
-            <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem" }}>
-                 
-                <div onClick={() => handleRestart()} style={{background:"lightgreen", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Restart the simulation</div>
-                <div onClick={() => resetParamsCallback()} style={{background:"pink", padding:"2px" , borderRadius:"0.25rem", fontSize:"0.875rem",cursor:"pointer" }}>Reset the parameters</div>
-            </div>
+                    <div onClick={() => handleRestart()} style={{ background: "lightgreen", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Restart the simulation</div>
+                    <div onClick={() => resetParamsCallback()} style={{ background: "pink", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Reset the parameters</div>
+                </div>
+            }
         </div>
     );
 };

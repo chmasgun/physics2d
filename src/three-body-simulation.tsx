@@ -27,7 +27,8 @@ const ThreeBodySimulationApp: React.FC<AppSelectorProps> = ({setSelectedApp}) =>
             {!simulationParams && <ThreeBodySetupPopup onSubmit={handleSetupSubmit} setSelectedApp={setSelectedApp} />}
             {simulationParams && <ThreeBodyCanvas
                 modeSelected={"harmony"}
-                resetParamsCallback={resetParamsCallback} />}
+                resetParamsCallback={resetParamsCallback}
+                enableInfoPopup={true} />}
         </div>
     );
 };

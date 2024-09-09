@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  height: 100svh;
 }
 
 .App-logo {
@@ -32,19 +33,34 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
 
-.app-selector-option{
-   display: flex ;
-   flex-direction: column;
-    cursor:pointer;
-    transition: background-color 0.3s;
-    
-    &:hover{
-      background-color: #eee;
-    }
+.app-selector-option {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-items: center;
+  padding: 0.5rem;
+
+  &:hover {
+    background-color: #eee;
+  }
+}
+
+.app-selector-options-container{
+  display: flex;
+  gap:1rem;
+}
+
+@media ( max-width  : 768px){
+  .app-selector-options-container{
+    flex-direction: column;
+  }
+ 
 }

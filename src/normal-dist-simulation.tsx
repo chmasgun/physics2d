@@ -25,14 +25,16 @@ const NormalDistributionSimulationApp: React.FC<AppSelectorProps> = ({setSelecte
     }
 
     return (
-        <div>
+        <div style={{background:"white", height:"100%", display:"flex", justifyContent:"center"}}>
             {!simulationParams && <NormalDistributionSetupPopup onSubmit={handleSetupSubmit} setSelectedApp={setSelectedApp}/>}
             {simulationParams && <NormalDistributionCanvas
                 ballCount={simulationParams.ballCount}
                 ballRadius={simulationParams.ballRadius}
                 ballColor={simulationParams.ballColor}
                 resetParamsCallback={resetParamsCallback}
-                enableInfoPopup={true} />}
+                enableInfoPopup={true} 
+                mapScale={1}
+                gravity={0.025}/>}
         </div>
     );
 };

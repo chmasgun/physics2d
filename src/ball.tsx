@@ -13,6 +13,7 @@ export class Ball {
     private touchingWall: boolean = false;
     // private isFrozen: boolean = false;
     private touchingAnotherBall: boolean = false;
+    private shouldStopMoving: boolean=false;
     private mass: number;
     private scale: number = 1
     private attractionGravitationalConstant: number = 420
@@ -83,7 +84,7 @@ export class Ball {
         this.radius = 0;
         this.y = 100000
         this.trailEnabled = false;
-
+        this.shouldStopMoving= true;
     }
 
     public applyAttractionForce(ball: Ball) {
@@ -139,8 +140,11 @@ export class Ball {
 
         //this.x = Math.max(this.radius, Math.min(this.x + this.direction[0], this.bounds[0] - this.radius));
         //this.y =  Math.min(this.y + this.direction[1], this.bounds[1] - this.radius) ;
-        this.x = this.x + this.direction[0];
-        this.y = this.y + this.direction[1];
+        if(! this.shouldStopMoving){
+
+            this.x = this.x + this.direction[0];
+            this.y = this.y + this.direction[1];
+        }
 
         // this.x = Math.ceil( 10000* this.x) / 10000
         // this.y = Math.ceil( 10000* this.y) / 10000
