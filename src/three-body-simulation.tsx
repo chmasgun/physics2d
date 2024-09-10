@@ -14,6 +14,8 @@ interface AppSelectorProps {
 
 const ThreeBodySimulationApp: React.FC<AppSelectorProps> = ({setSelectedApp}) => {
     const [simulationParams, setSimulationParams] = useState<SimulationParamsThree | null>(null);
+    const mobileScaleFactor = Math.min(window.innerHeight, window.innerWidth) / 900
+
 
     const handleSetupSubmit = (params: SimulationParamsThree) => {
         setSimulationParams(params);
@@ -29,7 +31,7 @@ const ThreeBodySimulationApp: React.FC<AppSelectorProps> = ({setSelectedApp}) =>
                 modeSelected={simulationParams.modeSelected}
                 resetParamsCallback={resetParamsCallback}
                 enableInfoPopup={true}
-                mapScaleOuter={ 1}
+                mapScaleOuter={ mobileScaleFactor}
                 autoRestartOnFinish={false} />}
         </div>
     );
