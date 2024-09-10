@@ -49,8 +49,8 @@ const NormalDistributionSetupPopup: React.FC<NormalDistributionSetupPopupProps> 
             <br />
             {/*  buttons */}
             <div style={{ display: "flex", gap: "1rem" }}>
-                <button onClick={handleSubmit}>Start Simulation</button>
-                <button onClick={() => setSelectedApp(-1)}>Go Back</button>
+                <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={handleSubmit}>Start Simulation</button>
+                <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => setSelectedApp(-1)}>Go Back</button>
             </div>
             <span style={{ color: "red", fontSize: "12px" }}>{ballCount > 600 ? "*Having too many balls might impact the performance" : ""}</span>
         </div>

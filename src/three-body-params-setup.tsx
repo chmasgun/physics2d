@@ -9,25 +9,28 @@ interface ThreeBodySetupPopupProps {
 
 const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, setSelectedApp }) => {
 
+    const itemPerPage = 3;
     const [modeSelected, setModeSelected] = useState<string>("harmony");
+    const [currentPage, setCurrentPage] = useState(0)
 
+    const maxNoPages = Math.ceil(Object.keys(ball_configs).filter(x => !x.startsWith("preview")).length / itemPerPage)
 
-    const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        onSubmit({ modeSelected });
-    };
+    // const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    //     event.preventDefault();
+    //     onSubmit({ modeSelected });
+    // };
 
 
     return (
-        <div className="mode-selection-popup" style={{  height: "clamp(80vh, 720px, 95vh)" }}>
+        <div className="mode-selection-popup" style={{ height: "clamp(80vh, 720px, 95vh)" }}>
             <h2>Go to the Simulation</h2>
-            <p style={{fontSize:"0.875rem"}}>Click any of these scenarios below to run its simulation. Please note that, these animation previews are scaled down in terms of size, hence the real simulation might work differently.</p>
+            <p style={{ fontSize: "0.875rem" }}>Click any of these scenarios below to run its simulation. Please note that, these animation previews are scaled down in terms of size, hence the real simulation might work differently.</p>
             <div className='three-body-options-container'>
                 {
-                    Object.keys(ball_configs).filter(x => !x.startsWith("preview")).map((x,i) =>
-                        <div className='three-body-options' key={i} onClick={() => onSubmit({ modeSelected: x })}>
-                            <div style={{flex:1, alignContent:"center"}}>{ball_configs[x]["desc"] || x }</div>
-                            <div style={{aspectRatio: 1, width:"200px", height:"200px", overflow:"hidden"}}>
+                    Object.keys(ball_configs).filter(x => !x.startsWith("preview")).slice(itemPerPage * currentPage, itemPerPage * (currentPage + 1)).map((x, i) =>
+                        <div className='three-body-options' key={x} onClick={() => onSubmit({ modeSelected: x })}>
+                            <div style={{ flex: 1, alignContent: "center" }}>{ball_configs[x]["desc"] || x}</div>
+                            <div style={{ aspectRatio: 1, width: "200px", height: "200px", overflow: "hidden" }}>
                                 <ThreeBodyCanvas
                                     modeSelected={x}
                                     resetParamsCallback={() => { }}
@@ -40,12 +43,20 @@ const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, set
                 }
             </div>
             {/*  buttons */}
-            <div style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
-                {/* <button onClick={handleSubmit}>Start Simulation</button> */}
-                <button onClick={() => setSelectedApp(-1)}>Go Back</button>
+            <div style={{ display: "flex", gap: "1rem 1.5rem", padding: "1rem", width: "100%"}}>
+               
+                {/* button container  prev and next*/}
+                <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent:"space-around"   }}>
+                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage <= 0}>Prev Page</button>
+                    {currentPage + 1}
+                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= maxNoPages - 1}>Next Page</button>
+                </div>
+                {/* button container  go backt*/}
+                <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent:"center" }}>
+                    <button   style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => setSelectedApp(-1)}>Go Back</button>
+                </div>
             </div>
-            {/* <span style={{ color: "red", fontSize: "12px" }}>{ballCount > 600 ? "*Having too many balls might impact the performance" : ""}</span> */}
-        </div>
+         </div>
     );
 };
 

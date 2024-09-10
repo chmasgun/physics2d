@@ -67,6 +67,7 @@
   border-top: 1px solid gray;
   overflow: auto;
   width: 100%;
+  flex:1;
   /* box-shadow: inset 0px 0px 1px gray; */
 }
 .three-body-options-container::-webkit-scrollbar{

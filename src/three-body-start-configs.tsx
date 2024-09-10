@@ -41,7 +41,7 @@ export const ball_configs: Record<string, any> =
     "harmony": {
         "attractionGravitationalConstant": 400,
         "ballCount": 3,
-        "desc": "A harmonious three body system that theoretically keeping its balance forever. Due to numeric roundings, the balance is lost after some iteration, though...",
+        "desc": "A harmonious three body system that theoretically keeping its balance forever. Due to numeric roundings, the balance is lost after some iterations, though...",
         "balls": [{
             x: 250 / 900,
             y: 333 / 900,
@@ -199,7 +199,7 @@ export const ball_configs: Record<string, any> =
             y: 450/ 900,
             direction: [3, 3],
             radius: 10,
-            color: "#3ff",
+            color: "#f34",
             gravity: 0,
             airFriction: 0,
             mass: 0,
@@ -216,6 +216,33 @@ export const ball_configs: Record<string, any> =
             mass: 0,
             shouldGlow: true
         }]
+    },
+    "twoblackhole": {
+        "attractionGravitationalConstant": 16,
+        "ballCount": 2,
+        "desc":"Two black holes getting too close, but still the balance is there!",
+        "balls": [{
+            x: 625/ 900,
+            y: 450/ 900,
+            direction: [-4, -4],
+            radius: 20,
+            color: "#000",
+            gravity: 0,
+            airFriction: 0,
+            mass: 2000,
+            shouldGlow: true
+        },
+        {
+            x: 275/ 900,
+            y: 450/ 900,
+            direction: [4, 4],
+            radius: 20,
+            color: "#000",
+            gravity: 0,
+            airFriction: 0,
+            mass: 2000,
+            shouldGlow: true
+        } ]
     },
     "quadrastars": {
         "attractionGravitationalConstant": 88.666,
@@ -379,7 +406,7 @@ export const ball_configs: Record<string, any> =
 
     },
     "exceeding": {
-        "attractionGravitationalConstant":  15.5, //0.0154,
+        "attractionGravitationalConstant":  37, //0.0154,
         "desc":"A weird but beautiful balance.",
         "ballCount": 3,
         "balls": [
@@ -391,7 +418,7 @@ export const ball_configs: Record<string, any> =
                 color: "#fd3",
                 gravity: 0,
                 airFriction: 0,
-                mass:10,
+                mass:5,
                 shouldGlow: true
             },
             {
@@ -402,7 +429,7 @@ export const ball_configs: Record<string, any> =
                 color: "#4fe",
                 gravity: 0,
                 airFriction: 0,
-                mass: 10,
+                mass: 5,
                 shouldGlow: true
             },
             {
@@ -413,7 +440,91 @@ export const ball_configs: Record<string, any> =
                 color: "#f77",
                 gravity: 0,
                 airFriction: 0,
-                mass: 10,
+                mass: 5,
+                shouldGlow: true
+            }
+
+        ]
+
+    },
+    "coolignorance": {
+        "attractionGravitationalConstant":  39, //0.0154,
+        "desc":"It seems like everybody minds their own business.",
+        "ballCount": 3,
+        "balls": [
+            {
+                x: 450/ 900,
+                y: 450/ 900,
+                direction: [0,  -1.25],
+                radius: 10,
+                color: "#fd3",
+                gravity: 0,
+                airFriction: 0,
+                mass:5,
+                shouldGlow: true
+            },
+            {
+                x: 250/ 900,
+                y: 450/ 900,
+                direction: [0 , 1], // 0.57
+                radius: 10,
+                color: "#4fe",
+                gravity: 0,
+                airFriction: 0,
+                mass: 5,
+                shouldGlow: true
+            },
+            {
+                x: 650/ 900,
+                y: 450/ 900,
+                direction: [0, 0.25],
+                radius: 10,
+                color: "#f77",
+                gravity: 0,
+                airFriction: 0,
+                mass: 5,
+                shouldGlow: true
+            }
+
+        ]
+
+    },
+    "infinity": {
+        "attractionGravitationalConstant":  290, //0.0154,
+        "desc":"Drawing an infinity shape.",
+        "ballCount": 3,
+        "balls": [
+            {
+                x: 255/ 900,
+                y: 450/ 900,
+                direction: [0,  -0.56],
+                radius: 10,
+                color: "#fd3",
+                gravity: 0,
+                airFriction: 0,
+                mass:1,
+                shouldGlow: true
+            },
+            {
+                x: 550/ 900,
+                y: 399/ 900,
+                direction: [- 1.59 , 0.28 ], // 0.28
+                radius: 10,
+                color: "#4fe",
+                gravity: 0,
+                airFriction: 0,
+                mass: 1,
+                shouldGlow: true
+            },
+            {
+                x: 550/ 900,
+                y: 501/ 900,
+                direction: [ 1.59, 0.28],
+                radius: 10,
+                color: "#f77",
+                gravity: 0,
+                airFriction: 0,
+                mass: 1,
                 shouldGlow: true
             }
 
