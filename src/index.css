@@ -8,9 +8,15 @@ body {
   /* background-color: #111; */
    height: 100svh;
    overflow: clip;
+
+
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+*{
+  box-sizing: border-box;
 }

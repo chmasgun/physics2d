@@ -7,7 +7,7 @@ import { ball_configs } from './three-body-start-configs';
 
 const customBalls = []
 
-type CanvasProps = { modeSelected: string; resetParamsCallback: () => void; enableInfoPopup: boolean , mapScaleOuter:number};
+type CanvasProps = { modeSelected: string; resetParamsCallback: () => void; enableInfoPopup: boolean , mapScaleOuter:number, autoRestartOnFinish:boolean};
 
 const fps = 60
 
@@ -15,7 +15,7 @@ const fps = 60
 
 
 
-const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback, enableInfoPopup = true, mapScaleOuter }) => {
+const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback, enableInfoPopup = true, mapScaleOuter, autoRestartOnFinish="false" }) => {
     const fieldSizeForSquare = 900 * mapScaleOuter
     const fieldSize: [number, number] = [fieldSizeForSquare, fieldSizeForSquare]
     const ballGenerator = BallGenerator.getInstance();
@@ -81,6 +81,11 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
                     //console.log([xmin, xymin, xscale, yscale, newScale]);
 
                     setMapScaleInner(newScale)
+                    if(newScale > 3){
+                        if(autoRestartOnFinish){
+                            handleRestart()
+                        }
+                    }
 
                     prevBalls.map(ball => {
 
@@ -120,8 +125,8 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
     return (
         // , minHeight: "100svh", minWidth: "100svw"
-        <div style={{ display: "flex", background:"#111", height:"100%" }}>
-            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, margin: "auto", display: "flex" }}>
+        <div style={{ display: "flex", background:"#111", height:"100svh" , width:"100svw", overflow:"hidden"}}>
+            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px` , display: "flex", alignItems:"center", justifyContent:"center" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
                         {ball.render()}

@@ -26,7 +26,7 @@ const NormalDistributionSetupPopup: React.FC<NormalDistributionSetupPopupProps> 
     }
 
     return (
-        <div style={{ position: 'fixed', display: "flex", flexDirection: "column", alignItems: "center", top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '10px', border: '1px solid black', width: "min(80vw, 400px)" }}>
+        <div className='mode-selection-popup'>
             <h2>Setup the Simulation</h2>
             <label style={{ display: "flex", gap: "0.5rem" }}>
                 Ball Radius:
