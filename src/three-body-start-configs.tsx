@@ -2,13 +2,13 @@
 
 export const ball_configs: Record<string, any> =
 {   "preview": {
-        "attractionGravitationalConstant": 420,
+        "attractionGravitationalConstant": 820,
         "ballCount": 3,
         "balls": [{
             x: 250 / 900,
             y: 333 / 900,
             direction: [1 * 0.5, -0.5 * Math.sqrt(3)],
-            radius: 4,
+            radius: 12,
             color: "red",
             gravity: 0,
             airFriction: 0,
@@ -19,7 +19,7 @@ export const ball_configs: Record<string, any> =
             x: 650 / 900,
             y: 333 / 900,
             direction: [1 * 0.5, 0.5 * Math.sqrt(3)],
-            radius: 4,
+            radius: 12,
             color: "yellow",
             gravity: 0,
             airFriction: 0,
@@ -30,7 +30,7 @@ export const ball_configs: Record<string, any> =
             x: 450 / 900,
             y: 333 / 900 + 200 * Math.sqrt(3) / 900,
             direction: [-2 * 0.5, 0],
-            radius: 4,
+            radius: 12,
             color: "cyan",
             gravity: 0,
             airFriction: 0,
