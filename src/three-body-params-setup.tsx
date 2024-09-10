@@ -20,6 +20,12 @@ const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, set
     //     onSubmit({ modeSelected });
     // };
 
+    function handlePageChange (increment:number)  {
+        setCurrentPage(currentPage - increment);
+        const container = document.getElementsByClassName("three-body-options-container")[0]
+        container.classList.add("invisible")
+        setTimeout(()=> {container.classList.remove("invisible")}, 1)
+    }
 
     return (
         <div className="mode-selection-popup three-body "   >
@@ -47,9 +53,9 @@ const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, set
                
                 {/* button container  prev and next*/}
                 <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent:"space-around"   }}>
-                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage <= 0}>Prev Page</button>
+                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => handlePageChange(1)} disabled={currentPage <= 0}>Previous</button>
                     {currentPage + 1}
-                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= maxNoPages - 1}>Next Page</button>
+                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => handlePageChange(-1)} disabled={currentPage >= maxNoPages - 1}>Next</button>
                 </div>
                 {/* button container  go backt*/}
                 <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent:"center" }}>
