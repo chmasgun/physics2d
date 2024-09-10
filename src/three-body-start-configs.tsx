@@ -2,12 +2,12 @@
 
 export const ball_configs: Record<string, any> =
 {   "preview": {
-        "attractionGravitationalConstant": 75,
+        "attractionGravitationalConstant": 420,
         "ballCount": 3,
         "balls": [{
-            x: 50,
-            y: 60,
-            direction: [1 * 0.3, -0.3 * Math.sqrt(3)],
+            x: 250 / 900,
+            y: 333 / 900,
+            direction: [1 * 0.5, -0.5 * Math.sqrt(3)],
             radius: 4,
             color: "red",
             gravity: 0,
@@ -16,9 +16,9 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 150,
-            y: 60,
-            direction: [1 * 0.3, 0.3 * Math.sqrt(3)],
+            x: 650 / 900,
+            y: 333 / 900,
+            direction: [1 * 0.5, 0.5 * Math.sqrt(3)],
             radius: 4,
             color: "yellow",
             gravity: 0,
@@ -27,9 +27,9 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 100,
-            y: 60 + 50 * Math.sqrt(3),
-            direction: [-2 * 0.3, 0],
+            x: 450 / 900,
+            y: 333 / 900 + 200 * Math.sqrt(3) / 900,
+            direction: [-2 * 0.5, 0],
             radius: 4,
             color: "cyan",
             gravity: 0,
@@ -42,8 +42,8 @@ export const ball_configs: Record<string, any> =
         "attractionGravitationalConstant": 420,
         "ballCount": 3,
         "balls": [{
-            x: 250,
-            y: 333,
+            x: 250 / 900,
+            y: 333 / 900,
             direction: [1 * 0.5, -0.5 * Math.sqrt(3)],
             radius: 10,
             color: "red",
@@ -53,8 +53,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 650,
-            y: 333,
+            x: 650 / 900,
+            y: 333 / 900,
             direction: [1 * 0.5, 0.5 * Math.sqrt(3)],
             radius: 10,
             color: "yellow",
@@ -64,8 +64,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 450,
-            y: 333 + 200 * Math.sqrt(3),
+            x: 450 / 900,
+            y: 333 / 900 + 200 * Math.sqrt(3) / 900,
             direction: [-2 * 0.5, 0],
             radius: 10,
             color: "cyan",
@@ -79,8 +79,8 @@ export const ball_configs: Record<string, any> =
         "attractionGravitationalConstant": 1200,
         "ballCount": 3,
         "balls": [{
-            x: 250,
-            y: 333,
+            x: 250/ 900,
+            y: 333/ 900,
             direction: [1 * 0.5, -0.5 * Math.sqrt(3)],
             radius: 10,
             color: "red",
@@ -90,8 +90,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 650,
-            y: 333,
+            x: 650/ 900,
+            y: 333/ 900,
             direction: [1 * 0.5, 0.5 * Math.sqrt(3)],
             radius: 10,
             color: "yellow",
@@ -101,8 +101,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 450,
-            y: 333 + 200 * Math.sqrt(3),
+            x: 450/ 900,
+            y: 333/ 900 + 200 * Math.sqrt(3)/ 900,
             direction: [-2 * 0.5, 0],
             radius: 10,
             color: "cyan",
@@ -116,8 +116,8 @@ export const ball_configs: Record<string, any> =
         "attractionGravitationalConstant": 1800,
         "ballCount": 3,
         "balls": [{
-            x: 250,
-            y: 333,
+            x: 250/ 900,
+            y: 333/ 900,
             direction: [1 * 0.5, -0.5 * Math.sqrt(3)],
             radius: 10,
             color: "red",
@@ -127,8 +127,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 650,
-            y: 333,
+            x: 650/ 900,
+            y: 333/ 900,
             direction: [1 * 0.5, 0.5 * Math.sqrt(3)],
             radius: 10,
             color: "yellow",
@@ -138,8 +138,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 450,
-            y: 333 + 200 * Math.sqrt(3),
+            x: 450/ 900,
+            y: 333/ 900 + 200 * Math.sqrt(3)/ 900,
             direction: [-2 * 0.5, 0],
             radius: 10,
             color: "cyan",
@@ -153,8 +153,8 @@ export const ball_configs: Record<string, any> =
         "attractionGravitationalConstant": 400,
         "ballCount": 2,
         "balls": [{
-            x: 600,
-            y: 450,
+            x: 600/ 900,
+            y: 450/ 900,
             direction: [0, -2],
             radius: 10,
             color: "#aad",
@@ -164,8 +164,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 300,
-            y: 450,
+            x: 300/ 900,
+            y: 450/ 900,
             direction: [0, 2],
             radius: 10,
             color: "#dda",
@@ -179,8 +179,8 @@ export const ball_configs: Record<string, any> =
         "attractionGravitationalConstant": 16,
         "ballCount": 3,
         "balls": [{
-            x: 450,
-            y: 450,
+            x: 450/ 900,
+            y: 450/ 900,
             direction: [0, 0],
             radius: 50,
             color: "#000",
@@ -190,8 +190,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 100,
-            y: 450,
+            x: 100/ 900,
+            y: 450/ 900,
             direction: [3, 3],
             radius: 20,
             color: "#3ff",
@@ -201,8 +201,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 800,
-            y: 450,
+            x: 800/ 900,
+            y: 450/ 900,
             direction: [-3, 3],
             radius: 20,
             color: "#ff6",
@@ -217,8 +217,8 @@ export const ball_configs: Record<string, any> =
         "ballCount": 4,
         "balls": [
             {
-                x: 300,
-                y: 300,
+                x: 300/ 900,
+                y: 300/ 900,
                 direction: [-1, 1],
                 radius: 10,
                 color: "cornflowerblue",
@@ -228,8 +228,8 @@ export const ball_configs: Record<string, any> =
                 shouldGlow: true
             },
             {
-                x: 300,
-                y: 600,
+                x: 300/ 900,
+                y: 600/ 900,
                 direction: [1, 1],
                 radius: 10,
                 color: "limegreen",
@@ -239,8 +239,8 @@ export const ball_configs: Record<string, any> =
                 shouldGlow: true
             },
             {
-                x: 600,
-                y: 600,
+                x: 600/ 900,
+                y: 600/ 900,
                 direction: [1, -1],
                 radius: 10,
                 color: "salmon",
@@ -250,8 +250,8 @@ export const ball_configs: Record<string, any> =
                 shouldGlow: true
             },
             {
-                x: 600,
-                y: 300,
+                x: 600/ 900,
+                y: 300/ 900,
                 direction: [-1, -1],
                 radius: 10,
                 color: "#eee",
@@ -265,8 +265,8 @@ export const ball_configs: Record<string, any> =
         "attractionGravitationalConstant": 25,
         "ballCount": 2,
         "balls": [{
-            x: 450,
-            y: 450,
+            x: 450/ 900,
+            y: 450/ 900,
             direction: [0, - 3 / 81],
             radius: 30,
             color: "#aff",
@@ -276,8 +276,8 @@ export const ball_configs: Record<string, any> =
             shouldGlow: true
         },
         {
-            x: 225,
-            y: 450,
+            x: 225/ 900,
+            y: 450/ 900,
             direction: [0, 3],
             radius: 10,
             color: "#ddd",
@@ -292,8 +292,8 @@ export const ball_configs: Record<string, any> =
         "ballCount": 3,
         "balls": [
             {
-                x: 450,
-                y: 450,
+                x: 450/ 900,
+                y: 450/ 900,
                 direction: [0,  -0.57 / 750],
                 radius: 30,
                 color: "#fd3",
@@ -303,8 +303,8 @@ export const ball_configs: Record<string, any> =
                 shouldGlow: true
             },
             {
-                x: -680,
-                y: 450,
+                x: -680/ 900,
+                y: 450/ 900,
                 direction: [0 , -0.02 * 0.24  + 0.57], // 0.57
                 radius: 5,
                 color: "#4fe",
@@ -314,8 +314,8 @@ export const ball_configs: Record<string, any> =
                 shouldGlow: true
             },
             {
-                x: -690,
-                y: 450,
+                x: -690/ 900,
+                y: 450/ 900,
                 direction: [0, 1 * 0.24 + 0.57],
                 radius: 1,
                 color: "#bbb",

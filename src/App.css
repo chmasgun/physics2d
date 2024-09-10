@@ -58,7 +58,22 @@
   display: flex;
   gap:1rem;
 }
+.three-body-options-container{
+  display: flex;
+  flex-direction: column;
+  gap:1rem;
+  overflow: auto;
+  width: 100%;
+}
 
+.three-body-options{
+  display: flex;
+  gap:1rem;
+  overflow: clip;
+  width: 100%;
+  justify-content: space-between;
+  min-height: 200px;
+}
 @media ( max-width  : 768px){
   .app-selector-options-container{
     flex-direction: column;

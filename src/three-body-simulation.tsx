@@ -3,9 +3,9 @@ import MainCanvas from './normal-dist-canvas';
 import ThreeBodySetupPopup from './three-body-params-setup';
 import ThreeBodyCanvas from './three-body-canvas';
 
-interface SimulationParams {
+interface SimulationParamsThree {
 
-    
+    modeSelected:string
 }
 
 interface AppSelectorProps {
@@ -13,9 +13,9 @@ interface AppSelectorProps {
   }
 
 const ThreeBodySimulationApp: React.FC<AppSelectorProps> = ({setSelectedApp}) => {
-    const [simulationParams, setSimulationParams] = useState<SimulationParams | null>(null);
+    const [simulationParams, setSimulationParams] = useState<SimulationParamsThree | null>(null);
 
-    const handleSetupSubmit = (params: SimulationParams) => {
+    const handleSetupSubmit = (params: SimulationParamsThree) => {
         setSimulationParams(params);
     };
     const resetParamsCallback = () => {
@@ -26,7 +26,7 @@ const ThreeBodySimulationApp: React.FC<AppSelectorProps> = ({setSelectedApp}) =>
         <div style={{background:"#111", height:"100%", display:"flex", justifyContent:"center"}}>
             {!simulationParams && <ThreeBodySetupPopup onSubmit={handleSetupSubmit} setSelectedApp={setSelectedApp} />}
             {simulationParams && <ThreeBodyCanvas
-                modeSelected={"harmony"}
+                modeSelected={simulationParams.modeSelected}
                 resetParamsCallback={resetParamsCallback}
                 enableInfoPopup={true}
                 mapScaleOuter={ 1} />}

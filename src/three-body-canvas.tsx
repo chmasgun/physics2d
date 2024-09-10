@@ -29,18 +29,23 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
     const speed = 0.5
     useEffect(() => {
-        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]
+        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]  * mapScaleOuter
         setBalls(
-            ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({ ...x, bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
+            ball_configs[currentMode]["balls"].map((a: any) => ballGenerator.createBall({ ...a, 
+                    x: a.x * fieldSizeForSquare, 
+                    y: a.y*fieldSizeForSquare, 
+                    direction: [ a.direction[0] * 1, a.direction[1] * 1],
+                    radius: a.radius* Math.sqrt(mapScaleOuter),
+                    bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
 
         )
 
     }, []);
 
     function handleRestart() {
-        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]
+        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"] * mapScaleOuter
         setBalls(
-            ball_configs[currentMode]["balls"].map((x: any) => ballGenerator.createBall({ ...x, bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
+            ball_configs[currentMode]["balls"].map((a: any) => ballGenerator.createBall({ ...a, x: a.x * fieldSizeForSquare, y: a.y*fieldSizeForSquare, bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
 
         )
     }
@@ -126,7 +131,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
                 <div style={{ position: "relative", margin: "auto", width: `${(1 / mapScaleInner) * fieldSize[0] / 2}px`, height: `${(1 / mapScaleInner) * fieldSize[1] / 2}px` }}>{
                     Array.from(Array(7).keys()).map((x) => {
-                        return <div key={x} style={{ position: "absolute", width: `${x * 100}%`, height: `${x * 100}%`, left: `-${(x - 1) * 50}%`, top: `-${(x - 1) * 50}%`, margin: "auto", background: "#fafafa04", borderRadius: "100%" }}></div>
+                        return <div key={x} style={{ position: "absolute", width: `${x * 100}%`, height: `${x * 100}%`, left: `-${(x - 1) * 50}%`, top: `-${(x - 1) * 50}%`, margin: "auto", background: "#fafafa04", borderRadius: "100%", pointerEvents:"none" }}></div>
                     })
                 }</div>
 

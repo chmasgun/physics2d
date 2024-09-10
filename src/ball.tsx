@@ -267,7 +267,7 @@ export class Ball {
                 { this.trailEnabled && <svg style={{ overflow: "visible", left: `${this.radius}px`, top: `${this.radius}px`, position: "absolute" , zIndex:"-1"}}>
                     <line x1={0} x2={  this.direction[0]} y1={0} y2={    this.direction[1]} stroke={this.color} strokeWidth={1}></line>
                     {/* style={{filter :"drop-shadow( 0px 0px 20px  rgb(2,200,200 ))", zIndex:"-"}} */}
-                    <path  d={this.pathData} strokeWidth={3} stroke={this.color} fill="transparent" />
+                    <path  d={this.pathData} strokeWidth={2} stroke={this.color} fill="transparent" />
                 </svg>
                 }
             </div>
