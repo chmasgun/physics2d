@@ -335,5 +335,89 @@ export const ball_configs: Record<string, any> =
 
         ]
 
+    },
+    "oneoff": {
+        "attractionGravitationalConstant":  155, //0.0154,
+        "desc":"One chills, others chaos...",
+        "ballCount": 3,
+        "balls": [
+            {
+                x: 450/ 900,
+                y: 450/ 900,
+                direction: [0,  - 2],
+                radius: 10,
+                color: "#fd3",
+                gravity: 0,
+                airFriction: 0,
+                mass: 5,
+                shouldGlow: true
+            },
+            {
+                x: 250/ 900,
+                y: 450/ 900,
+                direction: [0 , 2], // 0.57
+                radius: 10,
+                color: "#4fe",
+                gravity: 0,
+                airFriction: 0,
+                mass: 5,
+                shouldGlow: true
+            },
+            {
+                x: 650/ 900,
+                y: 450/ 900,
+                direction: [0, 0],
+                radius: 10,
+                color: "#8f8",
+                gravity: 0,
+                airFriction: 0,
+                mass: 5,
+                shouldGlow: true
+            }
+
+        ]
+
+    },
+    "exceeding": {
+        "attractionGravitationalConstant":  15.5, //0.0154,
+        "desc":"A weird but beautiful balance.",
+        "ballCount": 3,
+        "balls": [
+            {
+                x: 450/ 900,
+                y: 450/ 900,
+                direction: [0,  -1],
+                radius: 10,
+                color: "#fd3",
+                gravity: 0,
+                airFriction: 0,
+                mass:10,
+                shouldGlow: true
+            },
+            {
+                x: 250/ 900,
+                y: 450/ 900,
+                direction: [0 , 1], // 0.57
+                radius: 10,
+                color: "#4fe",
+                gravity: 0,
+                airFriction: 0,
+                mass: 10,
+                shouldGlow: true
+            },
+            {
+                x: 650/ 900,
+                y: 450/ 900,
+                direction: [0, 0],
+                radius: 10,
+                color: "#f77",
+                gravity: 0,
+                airFriction: 0,
+                mass: 10,
+                shouldGlow: true
+            }
+
+        ]
+
     }
 }
