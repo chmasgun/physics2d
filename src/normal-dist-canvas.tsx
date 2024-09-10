@@ -169,8 +169,8 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
                 </svg>
                 {/* histogram visualization */}
                 <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#5551", transform: "translateY(calc(-100% - 4px))", margin: "auto", display: "flex", alignItems: "flex-end" }}>
-                    {ballsInBinsPerc.map(x =>
-                        <div style={{ height: `${100 * x}%`, background: "#4e48", flex: 1 }}> </div>
+                    {ballsInBinsPerc.map((x,bin_ind) =>
+                        <div key={bin_ind} style={{ height: `${100 * x}%`, background: "#4e48", flex: 1 }}> </div>
                     )}
                 </div>
             </div>

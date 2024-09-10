@@ -76,12 +76,12 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
                     const yscale = Math.abs(ymin) > ymax ? (fieldSize[0] - 2 * ymin) / fieldSize[0] : (2 * ymax + fieldSize[0]) / fieldSize[0]
                     const xscale = Math.abs(xmin) > xmax ? (fieldSize[0] - 2 * xmin) / fieldSize[0] : (2 * xmax + fieldSize[0]) / fieldSize[0]
-                    const newScale = Math.max(...[yscale, xscale])
+                    const newScale = Math.max(...[yscale, xscale]) * 1.1
                     //console.log(ballPos.map(x => x[0])); 
                     //console.log([xmin, xymin, xscale, yscale, newScale]);
 
                     setMapScaleInner(newScale)
-                    if(newScale > 3){
+                    if(newScale > 3.3){
                         if(autoRestartOnFinish){
                             handleRestart()
                         }
@@ -125,7 +125,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
     return (
         // , minHeight: "100svh", minWidth: "100svw"
-        <div style={{ display: "flex", background:"#111", height:"100svh" , width:"100svw", overflow:"hidden"}}>
+        <div style={{ display: "flex", background:"#111", width:"100%", height:"100%", overflow:"hidden" , alignItems:"center", justifyContent:"center" }}>
             <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px` , display: "flex", alignItems:"center", justifyContent:"center" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>

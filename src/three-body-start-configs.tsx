@@ -39,8 +39,9 @@ export const ball_configs: Record<string, any> =
         }]
     },
     "harmony": {
-        "attractionGravitationalConstant": 420,
+        "attractionGravitationalConstant": 400,
         "ballCount": 3,
+        "desc": "A harmonious three body system that theoretically keeping its balance forever. Due to numeric roundings, the balance is lost after some iteration, though...",
         "balls": [{
             x: 250 / 900,
             y: 333 / 900,
@@ -78,6 +79,7 @@ export const ball_configs: Record<string, any> =
     "harmonyfast": {
         "attractionGravitationalConstant": 1200,
         "ballCount": 3,
+        "desc":"A very similar, harmonious system under higher gravitational pull. Their orbit gets elliptical.",
         "balls": [{
             x: 250/ 900,
             y: 333/ 900,
@@ -115,6 +117,7 @@ export const ball_configs: Record<string, any> =
     "ejection": {
         "attractionGravitationalConstant": 1800,
         "ballCount": 3,
+        "desc":"More gravitational pull is enforced, and one body goes out of the system ...",
         "balls": [{
             x: 250/ 900,
             y: 333/ 900,
@@ -150,8 +153,9 @@ export const ball_configs: Record<string, any> =
         }]
     },
     "twinstars": {
-        "attractionGravitationalConstant": 400,
+        "attractionGravitationalConstant": 360,
         "ballCount": 2,
+        "desc":"A twin star system that keeps its balance forever.",
         "balls": [{
             x: 600/ 900,
             y: 450/ 900,
@@ -178,11 +182,12 @@ export const ball_configs: Record<string, any> =
     "blackhole": {
         "attractionGravitationalConstant": 16,
         "ballCount": 3,
+        "desc":"An attempt to demonstrate the strength of a black hole. Luckily, our bodies cannot be crushed here!",
         "balls": [{
             x: 450/ 900,
             y: 450/ 900,
             direction: [0, 0],
-            radius: 50,
+            radius: 60,
             color: "#000",
             gravity: 0,
             airFriction: 0,
@@ -193,7 +198,7 @@ export const ball_configs: Record<string, any> =
             x: 100/ 900,
             y: 450/ 900,
             direction: [3, 3],
-            radius: 20,
+            radius: 10,
             color: "#3ff",
             gravity: 0,
             airFriction: 0,
@@ -204,7 +209,7 @@ export const ball_configs: Record<string, any> =
             x: 800/ 900,
             y: 450/ 900,
             direction: [-3, 3],
-            radius: 20,
+            radius: 10,
             color: "#ff6",
             gravity: 0,
             airFriction: 0,
@@ -213,8 +218,9 @@ export const ball_configs: Record<string, any> =
         }]
     },
     "quadrastars": {
-        "attractionGravitationalConstant": 100,
+        "attractionGravitationalConstant": 88.666,
         "ballCount": 4,
+        "desc":"A quadruple star system rotating calmly, until the tiny balance is broken out!",
         "balls": [
             {
                 x: 300/ 900,
@@ -263,6 +269,7 @@ export const ball_configs: Record<string, any> =
     },
     "earthmoon": {
         "attractionGravitationalConstant": 25,
+        "desc":"A boring demonstration of the moon rotating around the Earth. The system doesn't get mad :(",
         "ballCount": 2,
         "balls": [{
             x: 450/ 900,
@@ -289,6 +296,7 @@ export const ball_configs: Record<string, any> =
     },
     "sunearth": {
         "attractionGravitationalConstant":  0.5, //0.0154,
+        "desc":"A close-to-realistic illustration of the sun, the earth and the moon.",
         "ballCount": 3,
         "balls": [
             {

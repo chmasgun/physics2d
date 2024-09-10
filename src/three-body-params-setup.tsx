@@ -19,13 +19,14 @@ const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, set
 
 
     return (
-        <div className="mode-selection-popup" style={{  height: "max(80vh, 720px)" }}>
-            <h2>Setup the Simulation</h2>
+        <div className="mode-selection-popup" style={{  height: "clamp(80vh, 720px, 95vh)" }}>
+            <h2>Go to the Simulation</h2>
+            <p style={{fontSize:"0.875rem"}}>Click any of these scenarios below to run its simulation. Please note that, these animation previews are scaled down in terms of size, hence the real simulation might work differently.</p>
             <div className='three-body-options-container'>
                 {
-                    Object.keys(ball_configs).filter(x => !x.startsWith("preview")).map(x =>
-                        <div className='three-body-options' onClick={() => onSubmit({ modeSelected: x })}>
-                            {x}
+                    Object.keys(ball_configs).filter(x => !x.startsWith("preview")).map((x,i) =>
+                        <div className='three-body-options' key={i} onClick={() => onSubmit({ modeSelected: x })}>
+                            <div style={{flex:1, alignContent:"center"}}>{ball_configs[x]["desc"] || x }</div>
                             <div style={{aspectRatio: 1, width:"200px", height:"200px", overflow:"hidden"}}>
                                 <ThreeBodyCanvas
                                     modeSelected={x}

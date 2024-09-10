@@ -30,7 +30,7 @@ const NormalDistributionSetupPopup: React.FC<NormalDistributionSetupPopupProps> 
             <h2>Setup the Simulation</h2>
             <label style={{ display: "flex", gap: "0.5rem" }}>
                 Ball Radius:
-                <input type="range" value={ballRadius} min={3} max={10} onChange={(e) => setBallRadius(+e.target.value)} />
+                <input type="range" value={ballRadius} min={3} max={9} onChange={(e) => setBallRadius(+e.target.value)} />
                 <span>{ballRadius}</span>
             </label>
             <br />
