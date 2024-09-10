@@ -16,7 +16,7 @@ const fps = 60
 
 
 const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallback, enableInfoPopup = true, mapScaleOuter, autoRestartOnFinish="false" }) => {
-    const fieldSizeForSquare = 900 * mapScaleOuter
+    const fieldSizeForSquare = 900  // * mapScaleOuter
     const fieldSize: [number, number] = [fieldSizeForSquare, fieldSizeForSquare]
     const ballGenerator = BallGenerator.getInstance();
 
@@ -29,13 +29,12 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
     const speed = 0.5
     useEffect(() => {
-        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]  * mapScaleOuter
+        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"]  //* mapScaleOuter
         setBalls(
             ball_configs[currentMode]["balls"].map((a: any) => ballGenerator.createBall({ ...a, 
-                    x: a.x * fieldSizeForSquare, 
-                    y: a.y*fieldSizeForSquare, 
-                    direction: [ a.direction[0] * 1, a.direction[1] * 1],
-                    radius: a.radius* Math.sqrt(mapScaleOuter),
+                    x: a.x * fieldSizeForSquare , 
+                    y: a.y * fieldSizeForSquare, 
+                      
                     bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
 
         )
@@ -43,9 +42,13 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
     }, []);
 
     function handleRestart() {
-        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"] * mapScaleOuter
+        const currentAttractionForce = ball_configs[currentMode]["attractionGravitationalConstant"] //* mapScaleOuter
         setBalls(
-            ball_configs[currentMode]["balls"].map((a: any) => ballGenerator.createBall({ ...a, x: a.x * fieldSizeForSquare, y: a.y*fieldSizeForSquare, bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
+            ball_configs[currentMode]["balls"].map((a: any) => ballGenerator.createBall({ ...a, 
+                    x: a.x *fieldSizeForSquare , 
+                    y: a.y * fieldSizeForSquare, 
+                    
+                    bounds: fieldSize, attractionGravitationalConstant: currentAttractionForce, trailEnabled: isTrailEnabled }))
 
         )
     }
@@ -76,12 +79,12 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
 
                     const yscale = Math.abs(ymin) > ymax ? (fieldSize[0] - 2 * ymin) / fieldSize[0] : (2 * ymax + fieldSize[0]) / fieldSize[0]
                     const xscale = Math.abs(xmin) > xmax ? (fieldSize[0] - 2 * xmin) / fieldSize[0] : (2 * xmax + fieldSize[0]) / fieldSize[0]
-                    const newScale = Math.max(...[yscale, xscale]) * 1.1
+                    const newScale = Math.max(...[yscale, xscale]) * 1.1 / mapScaleOuter
                     //console.log(ballPos.map(x => x[0])); 
                     //console.log([xmin, xymin, xscale, yscale, newScale]);
 
                     setMapScaleInner(newScale)
-                    if(newScale > 3.3){
+                    if(newScale > 3.3 / mapScaleOuter){
                         if(autoRestartOnFinish){
                             handleRestart()
                         }
@@ -90,8 +93,8 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
                     prevBalls.map(ball => {
 
                         ball.setRenderPosition([
-                            fieldSize[0] / 2 + (ball.x - fieldSize[0] / 2) / newScale,
-                            fieldSize[0] / 2 + (ball.y - fieldSize[0] / 2) / newScale
+                            mapScaleOuter*fieldSize[0] / 2 + (ball.x - 1*fieldSize[0] / 2) / newScale,
+                            mapScaleOuter*fieldSize[0] / 2 + (ball.y - 1*fieldSize[0] / 2) / newScale
                         ]);
                         ball.setScale(newScale);
                     })
@@ -126,7 +129,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
     return (
         // , minHeight: "100svh", minWidth: "100svw"
         <div style={{ display: "flex", background:"#111", width:"100%", height:"100%", overflow:"hidden" , alignItems:"center", justifyContent:"center" }}>
-            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px` , display: "flex", alignItems:"center", justifyContent:"center" }}>
+            <div style={{ position: "relative", width: `${fieldSize[0] * mapScaleOuter}px`, height: `${fieldSize[1] * mapScaleOuter}px` , display: "flex", alignItems:"center", justifyContent:"center" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
                         {ball.render()}
@@ -146,7 +149,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
                 <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem" }}>
 
                     <div onClick={() => handleRestart()} style={{ background: "lightgreen", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Restart the simulation</div>
-                    <div onClick={() => resetParamsCallback()} style={{ background: "pink", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Reset the parameters</div>
+                    <div onClick={() => resetParamsCallback()} style={{ background: "pink", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Exit the simulation</div>
                 </div>
             }
         </div>
