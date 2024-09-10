@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ball_configs } from './three-body-start-configs';
 import ThreeBodyCanvas from './three-body-canvas';
 
@@ -20,11 +20,12 @@ const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, set
     //     onSubmit({ modeSelected });
     // };
 
-    function handlePageChange (increment:number)  {
+    useEffect(() => {
+        applyFlashEffect()
+    }, [])
+    function handlePageChange(increment: number) {
         setCurrentPage(currentPage - increment);
-        const container = document.getElementsByClassName("three-body-options-container")[0]
-        container.classList.add("invisible")
-        setTimeout(()=> {container.classList.remove("invisible")}, 1)
+        applyFlashEffect()
     }
 
     return (
@@ -49,21 +50,29 @@ const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, set
                 }
             </div>
             {/*  buttons */}
-            <div style={{ display: "flex", gap: "1rem 1.5rem", padding: "1rem", width: "100%", flexWrap:"wrap"}}>
-               
+            <div style={{ display: "flex", gap: "1rem 1.5rem", padding: "1rem", width: "100%", flexWrap: "wrap" }}>
+
                 {/* button container  prev and next*/}
-                <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent:"space-around"   }}>
-                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => handlePageChange(1)} disabled={currentPage <= 0}>Previous</button>
+                <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent: "space-around" }}>
+                    <button style={{ textWrap: "nowrap", padding: "0.25rem 1rem" }} onClick={() => handlePageChange(1)} disabled={currentPage <= 0}>Previous</button>
                     {currentPage + 1}
-                    <button style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => handlePageChange(-1)} disabled={currentPage >= maxNoPages - 1}>Next</button>
+                    <button style={{ textWrap: "nowrap", padding: "0.25rem 1rem" }} onClick={() => handlePageChange(-1)} disabled={currentPage >= maxNoPages - 1}>Next</button>
                 </div>
                 {/* button container  go backt*/}
-                <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent:"center" }}>
-                    <button   style={{textWrap:"nowrap", padding:"0.25rem 1rem"}} onClick={() => setSelectedApp(-1)}>Go Back</button>
+                <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent: "center" }}>
+                    <button style={{ textWrap: "nowrap", padding: "0.25rem 1rem" }} onClick={() => setSelectedApp(-1)}>Go Back</button>
                 </div>
             </div>
-         </div>
+        </div>
     );
 };
 
 export default ThreeBodySetupPopup;
+
+
+
+function applyFlashEffect() {
+    const container = document.getElementsByClassName("three-body-options-container")[0]
+    container.classList.add("invisible")
+    setTimeout(() => { container.classList.remove("invisible") }, 1)
+}

@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   height: 100svh;
+  background-color: #eff3ee;
 }
 
 .App-logo {
@@ -100,6 +101,7 @@
   overflow: clip;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
   transition: background-color 0.3s;
   cursor: pointer;
   box-shadow: 0px 0px 1px 0px gray;

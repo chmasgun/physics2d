@@ -152,7 +152,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     return (
         // , minHeight: "100svh"
         <div style={{ display: "flex", alignItems: "center" , justifyContent:"center", overflow:"clip"}}>
-            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, background: "white", margin: "auto" }}>
+            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px` ,margin: "auto" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
                         {ball.render()}
