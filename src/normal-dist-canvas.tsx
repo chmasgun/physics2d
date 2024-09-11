@@ -8,7 +8,7 @@ const speedFactor: number = 0
 const noOfBalls: number = 500
 const airFriction: number = 0.012
 
-
+const fps = 60
 
 const customBalls = []
 
@@ -18,9 +18,9 @@ type CanvasProps = {
     ballColor: string,
     resetParamsCallback: () => void,
     enableInfoPopup: boolean,
-    mapScale:number,
-    gravity:number,
-    autoRestartOnFinish:boolean
+    mapScale: number,
+    gravity: number,
+    autoRestartOnFinish: boolean
 };
 
 
@@ -28,24 +28,24 @@ type CanvasProps = {
 
 
 
-const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback, enableInfoPopup = true, mapScale, gravity, autoRestartOnFinish="false" }) => {
-    
-    
-    
-    const fieldSize: [number, number] = [600*mapScale, 900*mapScale]
-    
-    const bottleneckWidth: number = 120*mapScale;
-    const bottleneckY = 250*mapScale;
-    
-    const binFullWidth = 520*mapScale
-    const binStartOffsetWithCircles = 150*mapScale
-    const binStartEndX:[number,number] = [(fieldSize[0] - binFullWidth) / 2, (fieldSize[0] + binFullWidth) / 2]
-    const binStartEndY:[number,number] = [800*mapScale, fieldSize[1]]
+const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius, ballColor, resetParamsCallback, enableInfoPopup = true, mapScale, gravity, autoRestartOnFinish = "false" }) => {
+
+
+
+    const fieldSize: [number, number] = [600 * mapScale, 900 * mapScale]
+
+    const bottleneckWidth: number = 120 * mapScale;
+    const bottleneckY = 250 * mapScale;
+
+    const binFullWidth = 520 * mapScale
+    const binStartOffsetWithCircles = 150 * mapScale
+    const binStartEndX: [number, number] = [(fieldSize[0] - binFullWidth) / 2, (fieldSize[0] + binFullWidth) / 2]
+    const binStartEndY: [number, number] = [800 * mapScale, fieldSize[1]]
     const circularLayerSpacing = 50 * mapScale
-    const circularLayerObstacleRadius = 3* mapScale
-    
+    const circularLayerObstacleRadius = 3 * mapScale
+
     //const gravity: number = 0.025
-    
+
 
 
     const ballGenerator = BallGenerator.getInstance();
@@ -60,7 +60,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     const [spawnArea, setSpawnArea] = useState<[[number, number], [number, number]]>([[0, 0], [0, 0]])
 
     useEffect(() => {
-        const newSpawnArea: [[number, number], [number, number]] = [[ 0, fieldSize[0]  ], [- ballCount * ballRadius * ballRadius * 1.3 * (1/mapScale), 0]]
+        const newSpawnArea: [[number, number], [number, number]] = [[0, fieldSize[0]], [- ballCount * ballRadius * ballRadius * 1.3 * (1 / mapScale), 0]]
         // Initialize balls based on ballCount
         const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea, gravity, fieldSize)
 
@@ -70,79 +70,84 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     }, [ballCount]);
 
-    const visualObstacleParameters = {realizedBinWidth, fieldSize, bottleneckWidth,bottleneckY,binStartEndX,binStartEndY,binStartOffsetWithCircles , circularLayerSpacing, circularLayerObstacleRadius}
-    const obstacles: Obstacle[] = getObstacles(ballRadius, binWidth, setBallsInBins,visualObstacleParameters )
+    const visualObstacleParameters = { realizedBinWidth, fieldSize, bottleneckWidth, bottleneckY, binStartEndX, binStartEndY, binStartOffsetWithCircles, circularLayerSpacing, circularLayerObstacleRadius }
+    const obstacles: Obstacle[] = getObstacles( binWidth, setBallsInBins, visualObstacleParameters)
 
     //const ballsInBinsTotal = ballsInBins.reduce((partialsum, a) => partialsum+a, 0)
     const ballsInBinsMax = Math.max(...ballsInBins)
-    const ballsInBinsPerc = ballsInBins.map(x => x / (ballsInBinsMax+ 0.00001))
-   
+    const ballsInBinsPerc = ballsInBins.map(x => x / (ballsInBinsMax + 0.00001))
+
     useEffect(() => {
         let animationFrameId: number;
+        let lastTime = performance.now();
 
-        const updateBalls = () => {
+        const updateBalls = (time: number) => {
+            const deltaTime = time - lastTime;
 
-            let tempBallsLeft = 0;
-            setBalls(prevBalls => {
-                //var startTime = performance.now();
-                let localBallsLeft = 0;
-                let movingBallsLeft = 0;
-                const newBalls = prevBalls.map(ball => {
-                    ball.updatePosition();
-                    ball.setTouchingWall(false)
-                    localBallsLeft += (1 - ball.isInTheScene());
-                    movingBallsLeft += (1 - ball.getShouldStopMoving());
-                    return ball;
+            if (deltaTime >= 1000 / fps) {   // adjusting FPS here
+
+                let tempBallsLeft = 0;
+                setBalls(prevBalls => {
+                    //var startTime = performance.now();
+                    let localBallsLeft = 0;
+                    let movingBallsLeft = 0;
+                    const newBalls = prevBalls.map(ball => {
+                        ball.updatePosition();
+                        ball.setTouchingWall(false)
+                        localBallsLeft += (1 - ball.isInTheScene());
+                        movingBallsLeft += (1 - ball.getShouldStopMoving());
+                        return ball;
+                    });
+                    tempBallsLeft = localBallsLeft;
+                    setBallsRemaining(tempBallsLeft)
+                    setSimulationFinished(movingBallsLeft === 0)
+
+                    for (let ball of newBalls) {
+                        for (let obstacle of obstacles) {
+                            if (obstacle.checkCollision(ball)) {
+                                // Handle collision with obstacle
+                                obstacle.handleCollision(ball)
+                                ball.setTouchingWall(true)
+                            }
+                        }
+                    }
+
+                    // Check for collisions
+                    for (let i = 0; i < newBalls.length; i++) {
+                        for (let j = i + 1; j < newBalls.length; j++) {
+                            if (newBalls[i].isCollidingWith(newBalls[j])) {
+                                newBalls[i].handleCollisionWith(newBalls[j]);
+                            }
+                        }
+                    }
+                    //var endTime = performance.now();
+                    // console.log(`  ${endTime - startTime} milliseconds`);
+
+                    return newBalls;
                 });
-                tempBallsLeft = localBallsLeft;
-                setBallsRemaining(tempBallsLeft)
-                setSimulationFinished( movingBallsLeft ===  0)
 
-                for (let ball of newBalls) {
-                    for (let obstacle of obstacles) {
-                        if (obstacle.checkCollision(ball)) {
-                            // Handle collision with obstacle
-                            obstacle.handleCollision(ball)
-                            ball.setTouchingWall(true)
-                        }
-                    }
-                }
-
-                // Check for collisions
-                for (let i = 0; i < newBalls.length; i++) {
-                    for (let j = i + 1; j < newBalls.length; j++) {
-                        if (newBalls[i].isCollidingWith(newBalls[j])) {
-                            newBalls[i].handleCollisionWith(newBalls[j]);
-                        }
-                    }
-                }
-                //var endTime = performance.now();
-                // console.log(`  ${endTime - startTime} milliseconds`);
-
-                return newBalls;
-            });
-
-
+                lastTime = time - (deltaTime % 1000 / fps);
+            }
             animationFrameId = requestAnimationFrame(updateBalls);
         };
-        
+
         animationFrameId = requestAnimationFrame(updateBalls);
-        
-        if(autoRestartOnFinish){  // if auto restart is enabled, e.g in preview mode
-            if(simulationFinished){
+
+        if (autoRestartOnFinish) {  // if auto restart is enabled, e.g in preview mode
+            if (simulationFinished) {
                 setTimeout(() => {
                     handleRestart()
-                } , 2000) 
-                
-            } 
+                }, 2000)
+
+            }
         }
-        
+
 
         return () => cancelAnimationFrame(animationFrameId); // Cleanup on unmount
     }, [simulationFinished]);
 
     function handleRestart() {
-        console.log(ballCount, ballRadius, ballGenerator, spawnArea);
+        //console.log(ballCount, ballRadius, ballGenerator, spawnArea);
         const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, spawnArea, gravity, fieldSize)
 
         setBallsInBins([...Array.from(Array(bins).keys()).map(x => { return 0 })])
@@ -152,8 +157,8 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     return (
         // , minHeight: "100svh"
-        <div style={{ display: "flex", alignItems: "center" , justifyContent:"center", overflow:"clip"}}>
-            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px` ,margin: "auto" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", overflow: "clip" }}>
+            <div style={{ position: "relative", width: `${fieldSize[0]}px`, height: `${fieldSize[1]}px`, margin: "auto" }}>
                 {balls.map((ball, index) => (
                     <React.Fragment key={index}>
                         {ball.render()}
@@ -170,13 +175,13 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
                 </svg>
                 {/* histogram visualization */}
                 <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#5551", transform: "translateY(calc(-100% - 4px))", margin: "auto", display: "flex", alignItems: "flex-end" }}>
-                    {ballsInBinsPerc.map((x,bin_ind) =>
+                    {ballsInBinsPerc.map((x, bin_ind) =>
                         <div key={bin_ind} style={{ height: `${100 * x}%`, background: "#4e48", flex: 1 }}> </div>
                     )}
                 </div>
             </div>
             {enableInfoPopup &&
-                <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem", zIndex:"2" }}>
+                <div style={{ position: "fixed", left: "0", top: "0", background: "#eee", display: "flex", flexDirection: "column", gap: "0.5rem", padding: "1rem", zIndex: "2" }}>
                     <span>Remaining balls</span>
                     <span>{ballsRemaining}</span>
                     <div onClick={() => handleRestart()} style={{ background: "lightgreen", padding: "2px", borderRadius: "0.25rem", fontSize: "0.875rem", cursor: "pointer" }}>Restart the simulation</div>
@@ -217,11 +222,11 @@ function EndingBlocks(xstart: number, xend: number, ystart: number, yend: number
 }
 
 
-function getObstacles(ballRadius: number, binWidth: number, setBallsInBins: any, visualObstacleParameters:any
+function getObstacles( binWidth: number, setBallsInBins: any, visualObstacleParameters: any
 ) {
 
 
-    const  {realizedBinWidth, fieldSize, bottleneckWidth,bottleneckY,binStartEndX,binStartEndY,binStartOffsetWithCircles , circularLayerSpacing, circularLayerObstacleRadius} = visualObstacleParameters
+    const { realizedBinWidth, fieldSize, bottleneckWidth, bottleneckY, binStartEndX, binStartEndY, binStartOffsetWithCircles, circularLayerSpacing, circularLayerObstacleRadius } = visualObstacleParameters
 
     return [
 
@@ -247,12 +252,12 @@ function getObstacles(ballRadius: number, binWidth: number, setBallsInBins: any,
 
         new LinearObstacle(binStartEndX[0], (binStartEndY[1] + binStartEndY[0]) / 2, binStartEndX[1], (binStartEndY[1] + binStartEndY[0]) / 2, 1, "#fff1", DroppedBallHandlerHOF(setBallsInBins, binStartEndX[0], realizedBinWidth)),
 
-        new LinearObstacle(binStartEndX[0],binStartEndY[1],  binStartEndX[1],binStartEndY[1] ,1 )
+        new LinearObstacle(binStartEndX[0], binStartEndY[1], binStartEndX[1], binStartEndY[1], 1)
     ];
 }
 
 
-function InitializeBalls(ballCount: number, ballRadius: number, ballColor: string, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]], gravity: number, fieldSize:[number,number]) {
+function InitializeBalls(ballCount: number, ballRadius: number, ballColor: string, ballGenerator: BallGenerator, spawnArea: [[number, number], [number, number]], gravity: number, fieldSize: [number, number]) {
 
     return Array.from(Array(ballCount).keys()).map(x =>
         ballGenerator.createBall({
