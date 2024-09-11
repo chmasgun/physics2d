@@ -39,7 +39,7 @@ const NormalDistributionSimulationApp: React.FC<AppSelectorProps> = ({ setSelect
                     resetParamsCallback={resetParamsCallback}
                     enableInfoPopup={true}
                     mapScale={mobileScaleFactor}
-                    gravity={0.032}
+                    gravity={0.042}
                     autoRestartOnFinish={false} />
             </div>}
         </div>

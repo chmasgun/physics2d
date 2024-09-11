@@ -55,7 +55,7 @@ const ThreeBodySetupPopup: React.FC<ThreeBodySetupPopupProps> = ({ onSubmit, set
                 {/* button container  prev and next*/}
                 <div style={{ display: "flex", gap: "0.5rem", flex: "1", justifyContent: "space-around", alignItems:"center" }}>
                     <button style={{ textWrap: "nowrap", padding: "0.25rem 1rem" }} onClick={() => handlePageChange(1)} disabled={currentPage <= 0}>Previous</button>
-                    {currentPage + 1}
+                    <span style={{fontSize:"18px"}}>{currentPage + 1}</span>
                     <button style={{ textWrap: "nowrap", padding: "0.25rem 1rem" }} onClick={() => handlePageChange(-1)} disabled={currentPage >= maxNoPages - 1}>Next</button>
                 </div>
                 {/* button container  go backt*/}
