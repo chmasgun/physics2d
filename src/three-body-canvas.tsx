@@ -9,7 +9,7 @@ const customBalls = []
 
 type CanvasProps = { modeSelected: string; resetParamsCallback: () => void; enableInfoPopup: boolean , mapScaleOuter:number, autoRestartOnFinish:boolean};
 
-const fps = 1
+const fps = 60
 
 
 
@@ -61,6 +61,7 @@ const ThreeBodyCanvas: React.FC<CanvasProps> = ({ modeSelected, resetParamsCallb
             const deltaTime = time - lastTime;
 
             if (deltaTime >= 1000 / fps) {   // adjusting FPS here
+                 
                 setBalls(prevBalls => {
                     const newBalls = prevBalls.map(ball => {
                         ball.updatePosition();
