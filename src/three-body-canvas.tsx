@@ -9,7 +9,7 @@ const customBalls = []
 
 type CanvasProps = { modeSelected: string; resetParamsCallback: () => void; enableInfoPopup: boolean , mapScaleOuter:number, autoRestartOnFinish:boolean};
 
-const fps = 60
+const fps = 1
 
 
 
