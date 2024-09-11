@@ -60,7 +60,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
     const [spawnArea, setSpawnArea] = useState<[[number, number], [number, number]]>([[0, 0], [0, 0]])
 
     useEffect(() => {
-        const newSpawnArea: [[number, number], [number, number]] = [[0, fieldSize[0]], [- ballCount * ballRadius * ballRadius * 1.3 * (1 / mapScale), 0]]
+        const newSpawnArea: [[number, number], [number, number]] = [[5, fieldSize[0]-5], [- ballCount * ballRadius * ballRadius * 1.3 * (1 / mapScale), 0]]
         // Initialize balls based on ballCount
         const initialBalls = InitializeBalls(ballCount, ballRadius, ballColor, ballGenerator, newSpawnArea, gravity, fieldSize)
 
@@ -174,7 +174,7 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
                     ))}
                 </svg>
                 {/* histogram visualization */}
-                <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#5551", transform: "translateY(calc(-100% - 4px))", margin: "auto", display: "flex", alignItems: "flex-end" }}>
+                <div style={{ position: "relative", width: `${binStartEndX[1] - binStartEndX[0]-2}px`, height: `${binStartEndY[1] - binStartEndY[0]}px`, background: "#5551", transform: "translateY(calc(-100% - 4px))", margin: "auto", display: "flex", alignItems: "flex-end" }}>
                     {ballsInBinsPerc.map((x, bin_ind) =>
                         <div key={bin_ind} style={{ height: `${100 * x}%`, background: "#4e48", flex: 1 }}> </div>
                     )}
@@ -200,7 +200,7 @@ function CircularLayer(center: number, y: number, radius: number, distance: numb
 
     // generates layers of circle blocks
     return Array.from(Array(count).keys()).map((x, i) =>
-        new CircularObstacle(center + distance * (0.5 + i - count * 0.5), y, radius, 0.04)
+        new CircularObstacle(center + distance * (0.5 + i - count * 0.5), y, radius, 0.24)
     )
 }
 

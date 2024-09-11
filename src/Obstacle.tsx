@@ -23,7 +23,7 @@ export class LinearObstacle implements Obstacle, Collector {
     
     
     
-    constructor(x1: number, y1: number, x2: number, y2: number, friction: number, color:string="#999", droppedBallHandleFunction:(ball:Ball)=>void = ()=>{} ) {
+    constructor(x1: number, y1: number, x2: number, y2: number, friction: number, color:string="#ddd", droppedBallHandleFunction:(ball:Ball)=>void = ()=>{} ) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -172,12 +172,14 @@ export class CircularObstacle implements Obstacle {
     private y: number;
     private radius: number;
     friction: number;
+    private color:string;
 
-    constructor(x: number, y: number, radius: number, friction:number) {
+    constructor(x: number, y: number, radius: number, friction:number, color:string="#ddd") {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.friction = friction;
+        this.color = color
     }
 
     checkCollision(ball: Ball): boolean {
@@ -206,7 +208,7 @@ export class CircularObstacle implements Obstacle {
         const reflectionUnitVector = [reflectionX / Math.sqrt(reflectionX * reflectionX + reflectionY * reflectionY), reflectionY / Math.sqrt(reflectionX * reflectionX + reflectionY * reflectionY)]
 
         // console.log([ball.getDirection(), [reflectionX, reflectionY], reflectionUnitVector]);
-        ball.updateDirection([reflectionX * 1, reflectionY * 1])
+        ball.updateDirection([reflectionX   * (1-this.friction), reflectionY *  (1-this.friction)])
         ball.setPosition([
             this.x + (dx / distance) * (this.radius + ball.getRadius()),
             this.y + (dy / distance) * (this.radius + ball.getRadius())])
@@ -218,9 +220,9 @@ export class CircularObstacle implements Obstacle {
                 cx={this.x}
                 cy={this.y}
                 r={this.radius}
-                stroke="#888"
+                stroke={this.color}
                 strokeWidth="1"
-                fill="#888"
+                fill={this.color}
             />
         );
     }

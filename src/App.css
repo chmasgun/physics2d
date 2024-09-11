@@ -1,8 +1,33 @@
 .App {
   text-align: center;
   height: 100svh;
-  background-color: #eff3ee;
+  --opac-low: rgb(200, 240, 255, 0.03);
+    --opac-mid: rgb(200, 240, 255, 0.06);
+    --opac-high: rgb(200, 240, 255, 0.2);
+    --lamp-width: 40%;
+  background:
+
+        repeating-linear-gradient(rgba(160, 160, 250, 0.07) 0 3px, #0000 0 4rem),
+        repeating-linear-gradient(to right, rgba(160, 160, 250, 0.07) 0 3px, #0000 0 4rem),
+        conic-gradient(from -90deg at calc(50% + var(--lamp-width) /2) 0px, #000f 0deg, #000f 210deg, #0000 250deg),
+        conic-gradient(from -90deg at calc(50% - var(--lamp-width) /2) 0px, #fff0 0deg, var(--opac-high) 210deg, var(--opac-mid) 270deg, var(--opac-low) 290deg, #000f 330deg),
+        conic-gradient(from -90deg at calc(50% + var(--lamp-width) /2) 0px, #fff0 0deg, #000f 210deg, var(--opac-low) 250deg, var(--opac-mid) 270deg, var(--opac-high) 330deg),
+        rgba(0, 0, 0, 1);
 }
+/* background-color: #eff3ee; */
+
+/* .App::after {
+  background: rgb(200, 240, 255);
+   content: "";
+  width: var(--lamp-width);
+  position: absolute;
+  height: 5px;
+  top: 15px;
+  left: calc(50% - var(--lamp-width) / 2);
+  border-radius: 100px 100px 0 0;
+} */
+
+
 
 .App-logo {
   height: 40vmin;
@@ -124,16 +149,18 @@
   transform: translate(-50%, -50%);
   padding: 1rem;
   width: min(92vw, 600px);
+  max-height: 90vh;
   border-radius: 1rem;
   gap: 0.25rem;
   background: linear-gradient(45deg, white, rgb(238, 238, 238));
-  box-shadow: gray 0px 0px 5px 0px;
+  box-shadow: black 6px 6px 6px 0px;
+  overflow: auto;
 }
 
 .mode-selection-popup.three-body{
  
   width: min(92vw, 1200px);
-  height:  clamp(80vh, 720px, 95vh) ; 
+  height:  clamp(80vh, 720px, 90vh) ; 
 }
 
 @media ( max-width  : 768px){
