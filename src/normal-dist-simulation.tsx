@@ -16,6 +16,7 @@ interface AppSelectorProps {
 
 const NormalDistributionSimulationApp: React.FC<AppSelectorProps> = ({ setSelectedApp }) => {
     const [simulationParams, setSimulationParams] = useState<SimulationParams | null>(null);
+    const mobileScaleFactor = Math.min(window.innerHeight / 900,  window.innerWidth/ 600 , 1) 
 
     const handleSetupSubmit = (params: SimulationParams) => {
         setSimulationParams(params);
@@ -29,14 +30,14 @@ const NormalDistributionSimulationApp: React.FC<AppSelectorProps> = ({ setSelect
             
             {!simulationParams && <NormalDistributionSetupPopup onSubmit={handleSetupSubmit} setSelectedApp={setSelectedApp} />}
 
-            {simulationParams && <div style={{ background: "white", flex: "1" }}>
+            {simulationParams && <div style={{ background: "white", flex: "1" , display: "flex", justifyContent: "center"}}>
                  <NormalDistributionCanvas
                     ballCount={simulationParams.ballCount}
                     ballRadius={simulationParams.ballRadius}
                     ballColor={simulationParams.ballColor}
                     resetParamsCallback={resetParamsCallback}
                     enableInfoPopup={true}
-                    mapScale={1}
+                    mapScale={mobileScaleFactor}
                     gravity={0.025}
                     autoRestartOnFinish={false} />
             </div>}

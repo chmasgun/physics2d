@@ -70,7 +70,8 @@ const NormalDistributionCanvas: React.FC<CanvasProps> = ({ ballCount, ballRadius
 
     }, [ballCount]);
 
-    const obstacles: Obstacle[] = getObstacles(ballRadius, binWidth, setBallsInBins, realizedBinWidth, fieldSize, bottleneckWidth,bottleneckY,binStartEndX,binStartEndY,binStartOffsetWithCircles , circularLayerSpacing, circularLayerObstacleRadius)
+    const visualObstacleParameters = {realizedBinWidth, fieldSize, bottleneckWidth,bottleneckY,binStartEndX,binStartEndY,binStartOffsetWithCircles , circularLayerSpacing, circularLayerObstacleRadius}
+    const obstacles: Obstacle[] = getObstacles(ballRadius, binWidth, setBallsInBins,visualObstacleParameters )
 
     //const ballsInBinsTotal = ballsInBins.reduce((partialsum, a) => partialsum+a, 0)
     const ballsInBinsMax = Math.max(...ballsInBins)
@@ -216,16 +217,11 @@ function EndingBlocks(xstart: number, xend: number, ystart: number, yend: number
 }
 
 
-function getObstacles(ballRadius: number, binWidth: number, setBallsInBins: any, realizedBinWidth: number, 
-    fieldSize:[number,number],
-    bottleneckWidth:number,
-    bottleneckY:number,
-    binStartEndX:[number,number],
-    binStartEndY:[number,number],
-    binStartOffsetWithCircles: number ,
-    circularLayerSpacing:number,
-    circularLayerObstacleRadius:number,
+function getObstacles(ballRadius: number, binWidth: number, setBallsInBins: any, visualObstacleParameters:any
 ) {
+
+
+    const  {realizedBinWidth, fieldSize, bottleneckWidth,bottleneckY,binStartEndX,binStartEndY,binStartOffsetWithCircles , circularLayerSpacing, circularLayerObstacleRadius} = visualObstacleParameters
 
     return [
 
@@ -251,6 +247,7 @@ function getObstacles(ballRadius: number, binWidth: number, setBallsInBins: any,
 
         new LinearObstacle(binStartEndX[0], (binStartEndY[1] + binStartEndY[0]) / 2, binStartEndX[1], (binStartEndY[1] + binStartEndY[0]) / 2, 1, "#fff1", DroppedBallHandlerHOF(setBallsInBins, binStartEndX[0], realizedBinWidth)),
 
+        new LinearObstacle(binStartEndX[0],binStartEndY[1],  binStartEndX[1],binStartEndY[1] ,1 )
     ];
 }
 
